@@ -7,4 +7,5 @@
     <string name="password">Contraseña</string>
     <string name="login">Iniciar Sesión</string>
     <string name="title_activity_subject">SubjectActivity</string>
+    <string name="registrate">Registrate</string>
 </resources>
