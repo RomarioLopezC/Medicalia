@@ -17,8 +17,10 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
     @Bind(R.id.input_name) EditText _nameText;
+    @Bind(R.id.input_lastname) EditText _lastnameText;
     @Bind(R.id.input_email) EditText _emailText;
     @Bind(R.id.input_password) EditText _passwordText;
+    @Bind(R.id.input_password_confirm) EditText _passwordConfirmText;
     @Bind(R.id.btn_signup) Button _signupButton;
     @Bind(R.id.link_login) TextView _loginLink;
 
@@ -61,8 +63,10 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.show();
 
         String name = _nameText.getText().toString();
+        String lastname = _lastnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
+        String passwordConfirm = _passwordConfirmText.getText().toString();
 
         // TODO: Implement your own signup logic here.
 
@@ -95,14 +99,23 @@ public class SignupActivity extends AppCompatActivity {
         boolean valid = true;
 
         String name = _nameText.getText().toString();
+        String lastname = _lastnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
+        String passwordConfirm = _passwordConfirmText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
             _nameText.setError("at least 3 characters");
             valid = false;
         } else {
             _nameText.setError(null);
+        }
+
+        if (lastname.isEmpty() || lastname.length() < 5) {
+            _lastnameText.setError("at least 3 characters");
+            valid = false;
+        } else {
+            _lastnameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -117,6 +130,17 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         } else {
             _passwordText.setError(null);
+        }
+
+        if (passwordConfirm.isEmpty() || passwordConfirm.length() < 4 || passwordConfirm.length() > 10) {
+            _passwordConfirmText.setError("between 4 and 10 alphanumeric characters");
+            valid = false;
+        } else {
+            if(!password.equals(passwordConfirm)){
+                _passwordConfirmText.setError("passwords doesnt match");
+            }else{
+                _passwordConfirmText.setError(null);
+            }
         }
 
         return valid;
