@@ -1,4 +1,4 @@
-package com.example.user.doctoralia;
+package com.example.user.medicalia;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -125,15 +125,15 @@ public class SignupActivity extends AppCompatActivity {
             _emailText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 8 || password.length() > 15) {
+            _passwordText.setError("between 8 and 15 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
         }
 
-        if (passwordConfirm.isEmpty() || passwordConfirm.length() < 4 || passwordConfirm.length() > 10) {
-            _passwordConfirmText.setError("between 4 and 10 alphanumeric characters");
+        if (passwordConfirm.isEmpty() || passwordConfirm.length() < 8 || passwordConfirm.length() > 15) {
+            _passwordConfirmText.setError("between 8 and 15 alphanumeric characters");
             valid = false;
         } else {
             if(!password.equals(passwordConfirm)){

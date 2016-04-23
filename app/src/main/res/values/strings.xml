@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Doctoralia</string>
+    <string name="app_name">Medicalia</string>
 
     <!-- Login-->
     <string name="welcome">Bienvenido</string>
