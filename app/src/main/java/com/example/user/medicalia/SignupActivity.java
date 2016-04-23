@@ -60,7 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
+        progressDialog.setMessage(getString(R.string.creating_account));
         progressDialog.show();
 
         String name = _nameText.getText().toString();
@@ -94,7 +94,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
@@ -109,39 +109,39 @@ public class SignupActivity extends AppCompatActivity {
         String passwordConfirm = _passwordConfirmText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
+            _nameText.setError(getString(R.string.at_leats_3_characters));
             valid = false;
         } else {
             _nameText.setError(null);
         }
 
         if (lastname.isEmpty() || lastname.length() < 5) {
-            _lastnameText.setError("at least 3 characters");
+            _lastnameText.setError(getString(R.string.at_leats_3_characters));
             valid = false;
         } else {
             _lastnameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            _emailText.setError(getString(R.string.valid_email));
             valid = false;
         } else {
             _emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 8 || password.length() > 15) {
-            _passwordText.setError("between 8 and 15 alphanumeric characters");
+            _passwordText.setError(getString(R.string.between_8_characters));
             valid = false;
         } else {
             _passwordText.setError(null);
         }
 
         if (passwordConfirm.isEmpty() || passwordConfirm.length() < 8 || passwordConfirm.length() > 15) {
-            _passwordConfirmText.setError("between 8 and 15 alphanumeric characters");
+            _passwordConfirmText.setError(getString(R.string.between_8_characters));
             valid = false;
         } else {
             if(!password.equals(passwordConfirm)){
-                _passwordConfirmText.setError("passwords doesnt match");
+                _passwordConfirmText.setError(getString(R.string.password_not_match));
             }else{
                 _passwordConfirmText.setError(null);
             }
