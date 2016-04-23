@@ -3,6 +3,7 @@ package com.example.user.medicalia;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -67,6 +68,9 @@ public class SignupActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         String passwordConfirm = _passwordConfirmText.getText().toString();
+
+        TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+        String number = tm.getLine1Number();
 
         // TODO: Implement your own signup logic here.
 
