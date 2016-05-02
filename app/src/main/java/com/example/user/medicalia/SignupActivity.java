@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.user.medicalia.models.Patient;
 import com.example.user.medicalia.remote.PatientAPI;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -60,7 +61,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed(getString(R.string.register_failed));
             return;
         }
 
@@ -87,14 +88,30 @@ public class SignupActivity extends AppCompatActivity {
 
         PatientAPI.Factory.getInstance().register(patient).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    Toast.makeText(SignupActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, response.body().string());
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                    progressDialog.dismiss();
-                }
+            public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
+                final int code = response.code();
+                Gson gson = new Gson();
+
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                switch (code){
+                                    case 201:
+                                        Log.e(TAG, response.body().toString());
+                                        onSignupSuccess();
+                                        break;
+                                    case 422:
+                                        try {
+                                            Log.e(TAG, response.errorBody().string());
+                                            onSignupFailed(getString(R.string.register_failed));
+                                        } catch (IOException e) {
+                                            Log.e(TAG, e.getMessage());
+                                        }
+                                        break;
+                                }
+                                progressDialog.dismiss();
+                            }
+                        }, 3000);
             }
 
             @Override
@@ -103,17 +120,6 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     }
 
 
@@ -123,9 +129,8 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
-
+    public void onSignupFailed(String message) {
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 

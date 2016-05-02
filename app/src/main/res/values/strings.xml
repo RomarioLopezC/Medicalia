@@ -21,4 +21,5 @@
     <string name="between_8_characters">Debe ser de un minimo de 8 caracteres</string>
     <string name="password_not_match">Las contraseñas no coinciden</string>
     <string name="authenticating">Autenticando...</string>
+    <string name="register_failed">Fallo el registro</string>
 </resources>
