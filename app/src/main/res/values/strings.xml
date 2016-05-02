@@ -21,6 +21,19 @@
     <string name="between_8_characters">Debe ser de un minimo de 8 caracteres</string>
     <string name="password_not_match">Las contraseñas no coinciden</string>
     <string name="authenticating">Autenticando...</string>
+    <string name="register_failed">Fallo el registro</string>
+    <string name="complete_register">Completa tus datos</string>
+    <string name="blood_type">Tipo de sangre</string>
+    <string name="birthday">Fecha de nacimiento</string>
+    <string name="height">Altura</string>
+    <string name="weight">Peso</string>
+    <string name="allergies">Alergias</string>
+    <string name="save">Guardar</string>
+    <string name="at_leats_5_characters">Requiere almenos 5 caracteres</string>
+    <string name="invalid_value">Valor invalido</string>
+    <string name="gender">Genero</string>
+    <string name="saving_profile">Guardando perfil</string>
+    <string name="genderInvalid">Genero invalido (M/H)</string>
     <string name="title_activity_drawer">DrawerActivity</string>
 
     <!-- Drawer-->

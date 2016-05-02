@@ -11,8 +11,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.medicalia.models.Patient;
+import com.example.user.medicalia.remote.PatientAPI;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -51,7 +61,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed(getString(R.string.register_failed));
             return;
         }
 
@@ -74,16 +84,42 @@ public class SignupActivity extends AppCompatActivity {
 
         // TODO: Implement your own signup logic here.
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        Patient patient = new Patient(name,lastname,email,password,passwordConfirm, number);
+
+        PatientAPI.Factory.getInstance().register(patient).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
+                final int code = response.code();
+                Gson gson = new Gson();
+
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                switch (code){
+                                    case 201:
+                                        Log.e(TAG, response.body().toString());
+                                        onSignupSuccess();
+                                        break;
+                                    case 422:
+                                        try {
+                                            Log.e(TAG, response.errorBody().string());
+                                            onSignupFailed(response.errorBody().string());
+                                        } catch (IOException e) {
+                                            Log.e(TAG, e.getMessage());
+                                        }
+                                        break;
+                                }
+                                progressDialog.dismiss();
+                            }
+                        }, 3000);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+
+            }
+        });
     }
 
 
@@ -93,9 +129,8 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
-
+    public void onSignupFailed(String message) {
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 
@@ -142,6 +177,7 @@ public class SignupActivity extends AppCompatActivity {
         } else {
             if(!password.equals(passwordConfirm)){
                 _passwordConfirmText.setError(getString(R.string.password_not_match));
+                valid = false;
             }else{
                 _passwordConfirmText.setError(null);
             }
