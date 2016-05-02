@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -14,9 +15,10 @@ import retrofit2.http.POST;
  */
 public interface SessionAPI {
 
-    String BASE_URL = "http://medicalia.herokuapp.com/";
+    String BASE_URL = "http://192.168.228.54:3000";
 
-    @POST("api/sessions")
+    @Headers("Content-Type: application/json")
+    @POST("/api/sessions")
     Call<ResponseBody> login(@Body Session session);
 
     class Factory {
