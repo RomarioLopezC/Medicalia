@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.user.medicalia.models.Session;
 import com.example.user.medicalia.remote.SessionAPI;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -115,19 +116,35 @@ public class LoginActivity extends AppCompatActivity {
         SessionAPI.Factory.getInstance().login(session).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    Toast.makeText(LoginActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, response.body().string());
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                    progressDialog.dismiss();
+                int code = response.code();
+                Gson gson = new Gson();
+
+                switch (code){
+                    case 201:
+                        try {
+                            Toast.makeText(LoginActivity.this, response.body().string(), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, response.body().toString());
+                        } catch (IOException e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+
+                        break;
+                    case 422:
+                        try {
+
+                            Toast.makeText(LoginActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+                        break;
                 }
+
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(TAG, t.getMessage());
-
             }
         });
 
