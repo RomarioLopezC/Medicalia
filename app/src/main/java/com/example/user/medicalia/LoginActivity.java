@@ -131,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                         break;
                     case 422:
                         try {
+
                             Toast.makeText(LoginActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage());
