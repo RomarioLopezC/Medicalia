@@ -1,7 +1,9 @@
 package com.example.user.medicalia;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +53,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        SharedPreferences pref = getSharedPreferences("Medicalia", Context.MODE_PRIVATE);
+        if(pref.getBoolean("isLogued", false)){
+            Intent intent = new Intent(this, DrawerActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -128,8 +137,14 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             Toast.makeText(LoginActivity.this, response.body().string(), Toast.LENGTH_SHORT).show();
                             Log.e(TAG, response.body().toString());
-                            //Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
-                            //startActivity(intent);
+
+                            SharedPreferences.Editor editor = getSharedPreferences("Medicalia", Context.MODE_APPEND).edit();
+                            editor.putBoolean("isLogued", true);
+                            //editor.putString("token", );
+                            editor.apply();
+                            Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
+                            startActivity(intent);
+                            finish();
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage());
                         }
@@ -139,9 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONObject o =  new JSONObject(response.errorBody().string());
                             String message = (String) o.get("message");
-
                             Snackbar.make(getCurrentFocus(), message, Snackbar.LENGTH_SHORT).show();
-
                         } catch (IOException | JSONException e) {
                             Log.e(TAG, e.getMessage());
                         }

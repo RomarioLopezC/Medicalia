@@ -15,7 +15,7 @@ import retrofit2.http.POST;
  */
 public interface SessionAPI {
 
-    String BASE_URL = "http://192.168.228.54:3000";
+    String BASE_URL = "http://medicalia.herokuapp.com";
 
     @Headers("Content-Type: application/json")
     @POST("/api/sessions")
