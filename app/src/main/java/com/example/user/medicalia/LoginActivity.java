@@ -15,6 +15,9 @@ import com.example.user.medicalia.models.Session;
 import com.example.user.medicalia.remote.SessionAPI;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import butterknife.Bind;
@@ -124,6 +127,8 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             Toast.makeText(LoginActivity.this, response.body().string(), Toast.LENGTH_SHORT).show();
                             Log.e(TAG, response.body().toString());
+                            //Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+                            //startActivity(intent);
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage());
                         }
@@ -131,9 +136,10 @@ public class LoginActivity extends AppCompatActivity {
                         break;
                     case 422:
                         try {
-
-                            Toast.makeText(LoginActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
-                        } catch (IOException e) {
+                            JSONObject o =  new JSONObject(response.errorBody().string());
+                            String message = (String) o.get("message");
+                            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                        } catch (IOException | JSONException e) {
                             Log.e(TAG, e.getMessage());
                         }
                         break;
@@ -147,9 +153,6 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, t.getMessage());
             }
         });
-
-        //Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
-        //startActivity(intent);
     }
 
     public void onLoginFailed() {
