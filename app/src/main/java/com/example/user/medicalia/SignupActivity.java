@@ -11,8 +11,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.medicalia.models.Patient;
+import com.example.user.medicalia.remote.PatientAPI;
+
+import java.io.IOException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -73,6 +82,27 @@ public class SignupActivity extends AppCompatActivity {
         String number = tm.getLine1Number();
 
         // TODO: Implement your own signup logic here.
+
+        Patient patient = new Patient(name,lastname,email,password,passwordConfirm, number);
+
+        PatientAPI.Factory.getInstance().register(patient).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    Toast.makeText(SignupActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, response.body().string());
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage());
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+
+            }
+        });
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
