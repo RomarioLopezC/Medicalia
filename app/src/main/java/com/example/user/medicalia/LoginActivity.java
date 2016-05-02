@@ -3,6 +3,7 @@ package com.example.user.medicalia;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -138,7 +139,9 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONObject o =  new JSONObject(response.errorBody().string());
                             String message = (String) o.get("message");
-                            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+
+                            Snackbar.make(getCurrentFocus(), message, Snackbar.LENGTH_SHORT).show();
+
                         } catch (IOException | JSONException e) {
                             Log.e(TAG, e.getMessage());
                         }
