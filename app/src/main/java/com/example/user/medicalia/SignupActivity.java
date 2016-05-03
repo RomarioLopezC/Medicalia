@@ -103,7 +103,7 @@ public class SignupActivity extends AppCompatActivity {
                                     case 422:
                                         try {
                                             Log.e(TAG, response.errorBody().string());
-                                            onSignupFailed(getString(R.string.register_failed));
+                                            onSignupFailed(response.errorBody().string());
                                         } catch (IOException e) {
                                             Log.e(TAG, e.getMessage());
                                         }
@@ -177,6 +177,7 @@ public class SignupActivity extends AppCompatActivity {
         } else {
             if(!password.equals(passwordConfirm)){
                 _passwordConfirmText.setError(getString(R.string.password_not_match));
+                valid = false;
             }else{
                 _passwordConfirmText.setError(null);
             }
