@@ -12,11 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.medicalia.models.Session;
 import com.example.user.medicalia.remote.SessionAPI;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,8 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        SharedPreferences pref = getSharedPreferences("Medicalia", Context.MODE_PRIVATE);
-        if(pref.getBoolean("isLogued", false)){
+        SharedPreferences pref = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_PRIVATE);
+        if(pref.getBoolean(getString(R.string.is_logued_key), false)){
             Intent intent = new Intent(this, DrawerActivity.class);
             startActivity(intent);
             finish();
@@ -130,17 +128,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 int code = response.code();
-                Gson gson = new Gson();
+                progressDialog.dismiss();
 
                 switch (code){
                     case 201:
                         try {
-                            Toast.makeText(LoginActivity.this, response.body().string(), Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, response.body().toString());
-
-                            SharedPreferences.Editor editor = getSharedPreferences("Medicalia", Context.MODE_APPEND).edit();
-                            editor.putBoolean("isLogued", true);
-                            //editor.putString("token", );
+                            SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND).edit();
+                            editor.putBoolean(getString(R.string.is_logued_key), true);
+                            editor.putString(getString(R.string.current_user_key), response.body().string());
                             editor.apply();
                             Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
                             startActivity(intent);
@@ -153,15 +148,18 @@ public class LoginActivity extends AppCompatActivity {
                     case 422:
                         try {
                             JSONObject o =  new JSONObject(response.errorBody().string());
-                            String message = (String) o.get("message");
+                            String message = (String) o.get(getString(R.string.message_key));
                             Snackbar.make(getCurrentFocus(), message, Snackbar.LENGTH_SHORT).show();
                         } catch (IOException | JSONException e) {
                             Log.e(TAG, e.getMessage());
                         }
                         break;
+                    default:
+                        Log.e(TAG, String.valueOf(code));
+                        Snackbar.make(getCurrentFocus(), "Error del Servidor. Inténtelo más tarde", Snackbar.LENGTH_SHORT).show();
                 }
 
-                progressDialog.dismiss();
+
             }
 
             @Override

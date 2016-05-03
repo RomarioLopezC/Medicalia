@@ -14,11 +14,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.user.medicalia.models.UserAttributes;
+import com.google.gson.Gson;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private UserAttributes currentUser;
 
     @Bind(R.id.textView_pacient_name)
     TextView textView_pacient_name;
@@ -32,6 +37,27 @@ public class DrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_drawer);
         ButterKnife.bind(this);
 
+        Gson gson = new Gson();
+        String jsonCurrentUser = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
+                .getString(getString(R.string.current_user_key), "{\n" +
+                        "  \"email\": \"test@hotmail.com\",\n" +
+                        "  \"name\": \"Test\",\n" +
+                        "  \"lastname\": \"Perez\",\n" +
+                        "  \"mobile\": \"9993939393\",\n" +
+                        "  \"token\": \"22c07aa8cca26a484b707e363dd90f3d\",\n" +
+                        "  \"user_type\": null,\n" +
+                        "  \"patient\": {\n" +
+                        "    \"blood_type\": \"B+\",\n" +
+                        "    \"birthday\": \"1994-12-12\",\n" +
+                        "    \"height\": 1,\n" +
+                        "    \"weight\": 69,\n" +
+                        "    \"allergies\": \"none\",\n" +
+                        "    \"gender\": \"macho\"\n" +
+                        "  }\n" +
+                        "}");
+
+        currentUser = gson.fromJson(jsonCurrentUser, UserAttributes.class);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,8 +70,8 @@ public class DrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        textView_pacient_name.setText("Hola Mundo");
-        textView_pacient_email.setText("jajajajaja@hotmail.com");
+        textView_pacient_name.setText(currentUser.getName());
+        textView_pacient_email.setText(currentUser.getEmail());
     }
 
     @Override
@@ -94,12 +120,11 @@ public class DrawerActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
 
-            SharedPreferences.Editor edit = getSharedPreferences("Medicalia", Context.MODE_APPEND).edit();
+            SharedPreferences.Editor edit = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND).edit();
             edit.clear();
             edit.apply();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

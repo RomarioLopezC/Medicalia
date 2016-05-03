@@ -27,6 +27,12 @@ public class UserAttributes {
     @SerializedName("mobile")
     @Expose
     private String mobile;
+    @SerializedName("token")
+    @Expose
+    private String token;
+    @SerializedName("patient")
+    @Expose
+    private Patient patient;
 
     public UserAttributes(String name, String lastname, String password, String passwordConfirmation, String email, String mobile){
         this.email = email;
@@ -145,4 +151,19 @@ public class UserAttributes {
         this.mobile = mobile;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 }
