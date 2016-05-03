@@ -59,6 +59,8 @@ public class CompleteRegisterActivity extends AppCompatActivity {
         String weight = _weight.getText().toString();
         String allergies = _allergies.getText().toString();
         String gender = _gender.getText().toString();
+
+
     }
 
     public void onFillFailed(String message){
