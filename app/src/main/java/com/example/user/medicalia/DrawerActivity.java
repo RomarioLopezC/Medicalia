@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.user.medicalia.fragments.DoctorsFragment;
+import com.example.user.medicalia.fragments.ProfileFragment;
 import com.example.user.medicalia.models.UserAttributes;
 import com.google.gson.Gson;
 
@@ -118,6 +119,8 @@ public class DrawerActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            fragment = new ProfileFragment();
+            fragmentTransaction = true;
         } else if (id == R.id.nav_gallery) {
             fragment = new DoctorsFragment();
             fragmentTransaction = true;
