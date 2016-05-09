@@ -43,6 +43,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="logout">Cerrar Sesión</string>
+    <string name="doctors">Doctores</string>
 
     <!-- Constantes-->
     <string name="name_shared_preferences">Medicalia</string>

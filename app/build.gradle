@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 'Google Inc.:Google APIs:23'
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "com.example.user.medicalia"
@@ -29,4 +29,5 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.android.support:recyclerview-v7:22.0.+'
 }
