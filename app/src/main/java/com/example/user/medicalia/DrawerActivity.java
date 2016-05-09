@@ -118,10 +118,9 @@ public class DrawerActivity extends AppCompatActivity
         Fragment fragment = null;
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
             fragment = new ProfileFragment();
             fragmentTransaction = true;
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.find_by_name) {
             fragment = new DoctorsFragment();
             fragmentTransaction = true;
 

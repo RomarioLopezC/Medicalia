@@ -5,19 +5,31 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/md"
-            android:title="@string/doctors" />
+            android:title="@string/profile" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="@string/calendar" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logout"
             android:title="@string/logout" />
     </group>
 
+    <item android:title="@string/find_doctors">
+        <menu>
+            <item
+                android:id="@+id/find_by_name"
+                android:icon="@drawable/md"
+                android:title="@string/find_doctors" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/find_by_hospital" />
+            <item
+                android:id="@+id/find_by_category"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/find_by_specialty" />
+        </menu>
+    </item>
 </menu>
