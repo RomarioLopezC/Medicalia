@@ -20,7 +20,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_fotoprefil1"/>
+            android:src="@drawable/doctor"/>
 
         <TextView
             android:id="@+id/category_name"
