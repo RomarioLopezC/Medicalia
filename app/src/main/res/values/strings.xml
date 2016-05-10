@@ -48,7 +48,7 @@
     <string name="find_by_hospital">Hospital</string>
     <string name="find_by_specialty">Especialidad</string>
     <string name="profile">Perfil</string>
-    <string name="calendar">Calendar</string>
+    <string name="calendar">Calendario</string>
 
     <!-- Constantes-->
     <string name="name_shared_preferences">Medicalia</string>
