@@ -15,10 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.fragments.DoctorsFragment;
 import com.example.user.medicalia.fragments.ProfileFragment;
 import com.example.user.medicalia.models.UserAttributes;
-import com.google.gson.Gson;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private UserAttributes currentUser;
+    private String jsonCurrentUser;
 
     @Bind(R.id.textView_pacient_name)
     TextView textView_pacient_name;
@@ -40,8 +40,7 @@ public class DrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_drawer);
         ButterKnife.bind(this);
 
-        Gson gson = new Gson();
-        String jsonCurrentUser = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
+         jsonCurrentUser = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
                 .getString(getString(R.string.current_user_key), "{\n" +
                         "  \"email\": \"test@hotmail.com\",\n" +
                         "  \"name\": \"Test\",\n" +
@@ -59,7 +58,7 @@ public class DrawerActivity extends AppCompatActivity
                         "  }\n" +
                         "}");
 
-        currentUser = gson.fromJson(jsonCurrentUser, UserAttributes.class);
+        UserAttributes currentUser = Utils.toUserAtributtes(jsonCurrentUser);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,8 +117,13 @@ public class DrawerActivity extends AppCompatActivity
         Fragment fragment = null;
 
         if (id == R.id.nav_camera) {
+
             fragment = new ProfileFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("user", jsonCurrentUser);
+            fragment.setArguments(bundle);
             fragmentTransaction = true;
+
         } else if (id == R.id.find_by_name) {
             fragment = new DoctorsFragment();
             fragmentTransaction = true;
