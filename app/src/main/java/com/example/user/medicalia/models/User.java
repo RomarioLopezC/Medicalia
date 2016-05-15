@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class UserAttributes {
+public class User {
 
     @SerializedName("email")
     @Expose
@@ -30,11 +30,11 @@ public class UserAttributes {
     @SerializedName("token")
     @Expose
     private String token;
-    @SerializedName("patient")
+    @SerializedName("user_type")
     @Expose
-    private Patient patient;
+    private Object userType;
 
-    public UserAttributes(String name, String lastname, String password, String passwordConfirmation, String email, String mobile){
+    public User(String name, String lastname, String password, String passwordConfirmation, String email, String mobile){
         this.email = email;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
@@ -59,42 +59,6 @@ public class UserAttributes {
      */
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    /**
-     * 
-     * @return
-     *     The password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * 
-     * @param password
-     *     The password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * 
-     * @return
-     *     The passwordConfirmation
-     */
-    public String getPasswordConfirmation() {
-        return passwordConfirmation;
-    }
-
-    /**
-     * 
-     * @param passwordConfirmation
-     *     The password_confirmation
-     */
-    public void setPasswordConfirmation(String passwordConfirmation) {
-        this.passwordConfirmation = passwordConfirmation;
     }
 
     /**
@@ -151,19 +115,40 @@ public class UserAttributes {
         this.mobile = mobile;
     }
 
+    /**
+     * 
+     * @return
+     *     The token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * 
+     * @param token
+     *     The token
+     */
     public void setToken(String token) {
         this.token = token;
     }
 
-    public Patient getPatient() {
-        return patient;
+    /**
+     * 
+     * @return
+     *     The userType
+     */
+    public Object getUserType() {
+        return userType;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    /**
+     * 
+     * @param userType
+     *     The user_type
+     */
+    public void setUserType(Object userType) {
+        this.userType = userType;
     }
+
 }

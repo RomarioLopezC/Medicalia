@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.Utils.Utils;
-import com.example.user.medicalia.models.UserAttributes;
+import com.example.user.medicalia.models.Patient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
-    private UserAttributes currentUser;
+    private Patient currentUser;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -60,18 +60,18 @@ public class ProfileFragment extends Fragment {
         String jsonUser = getArguments().getString("user", "");
         currentUser = Utils.toUserAtributtes(jsonUser);
 
-        String fullname = currentUser.getName() + " " + currentUser.getLastname();
+        String fullname = currentUser.getUser().getName() + " " + currentUser.getUser().getLastname();
         textView_name.setText(fullname);
-        textView_email.setText(currentUser.getEmail());
-        textView_phone.setText(currentUser.getMobile());
-        textView_blood_type.setText(currentUser.getPatient().getBloodType());
-        textView_birthday.setText(currentUser.getPatient().getBirthday());
-        String height = String.valueOf(currentUser.getPatient().getHeight()) + " cm";
+        textView_email.setText(currentUser.getUser().getEmail());
+        textView_phone.setText(currentUser.getUser().getMobile());
+        textView_blood_type.setText(currentUser.getBloodType());
+        textView_birthday.setText(currentUser.getBirthday());
+        String height = String.valueOf(currentUser.getHeight()) + " cm";
         textView_height.setText(height);
-        String weight = String.valueOf(currentUser.getPatient().getWeight()) + " kg";
+        String weight = String.valueOf(currentUser.getWeight()) + " kg";
         textView_weight.setText(weight);
-        textView_allergies.setText(currentUser.getPatient().getAllergies());
-        textView_gender.setText(currentUser.getPatient().getGender());
+        textView_allergies.setText(currentUser.getAllergies());
+        textView_gender.setText(currentUser.getGender());
 
 
         // Inflate the layout for this fragment

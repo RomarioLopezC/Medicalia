@@ -1,6 +1,6 @@
 package com.example.user.medicalia.Utils;
 
-import com.example.user.medicalia.models.UserAttributes;
+import com.example.user.medicalia.models.Patient;
 import com.google.gson.Gson;
 
 /**
@@ -8,9 +8,9 @@ import com.google.gson.Gson;
  */
 public class Utils {
 
-    public static UserAttributes toUserAtributtes(String json){
+    public static Patient toUserAtributtes(String json){
         Gson gson = new Gson();
-        UserAttributes user = gson.fromJson(json, UserAttributes.class);
-        return user;
+        Patient patient = gson.fromJson(json, Patient.class);
+        return patient;
     }
 }

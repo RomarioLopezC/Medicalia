@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.fragments.DoctorsFragment;
 import com.example.user.medicalia.fragments.ProfileFragment;
-import com.example.user.medicalia.models.UserAttributes;
+import com.example.user.medicalia.models.Patient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,23 +42,23 @@ public class DrawerActivity extends AppCompatActivity
 
          jsonCurrentUser = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
                 .getString(getString(R.string.current_user_key), "{\n" +
-                        "  \"email\": \"test@hotmail.com\",\n" +
-                        "  \"name\": \"Test\",\n" +
-                        "  \"lastname\": \"Perez\",\n" +
-                        "  \"mobile\": \"9993939393\",\n" +
-                        "  \"token\": \"22c07aa8cca26a484b707e363dd90f3d\",\n" +
-                        "  \"user_type\": null,\n" +
-                        "  \"patient\": {\n" +
-                        "    \"blood_type\": \"B+\",\n" +
-                        "    \"birthday\": \"1994-12-12\",\n" +
-                        "    \"height\": 1,\n" +
-                        "    \"weight\": 69,\n" +
-                        "    \"allergies\": \"none\",\n" +
-                        "    \"gender\": \"macho\"\n" +
+                        "  \"blood_type\": \"B++\",\n" +
+                        "  \"birthday\": \"9999-12-12\",\n" +
+                        "  \"height\": 1,\n" +
+                        "  \"weight\": 69,\n" +
+                        "  \"allergies\": \"none\",\n" +
+                        "  \"gender\": \"macho\",\n" +
+                        "  \"user\": {\n" +
+                        "    \"email\": \"test@hotmail.com\",\n" +
+                        "    \"name\": \"Test\",\n" +
+                        "    \"lastname\": \"Perez\",\n" +
+                        "    \"mobile\": \"9993939393\",\n" +
+                        "    \"token\": \"22c07aa8cca26a484b707e363dd90f3d\",\n" +
+                        "    \"user_type\": null\n" +
                         "  }\n" +
                         "}");
 
-        UserAttributes currentUser = Utils.toUserAtributtes(jsonCurrentUser);
+        Patient currentUser = Utils.toUserAtributtes(jsonCurrentUser);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,8 +72,8 @@ public class DrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        textView_pacient_name.setText(currentUser.getName());
-        textView_pacient_email.setText(currentUser.getEmail());
+        textView_pacient_name.setText(currentUser.getUser().getName());
+        textView_pacient_email.setText(currentUser.getUser().getEmail());
     }
 
     @Override
