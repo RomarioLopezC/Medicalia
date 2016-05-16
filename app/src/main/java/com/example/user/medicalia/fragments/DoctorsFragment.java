@@ -1,6 +1,7 @@
 package com.example.user.medicalia.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -42,6 +43,7 @@ public class DoctorsFragment extends Fragment {
     public List<Doctor> doctors;
     private Activity activity;
     private DoctorAdapter doctorAdapter;
+    private ProgressDialog progressDialog;
 
     @Bind(R.id.recycler_view_doctors)
     public RecyclerView recyclerViewDoctores;
@@ -84,6 +86,12 @@ public class DoctorsFragment extends Fragment {
     }
 
     public void getListDoctors() {
+        progressDialog = new ProgressDialog(getActivity(),
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+
         String token = "Token token=" + currentUser.getUser().getToken();
         DoctorAPI.Factory.getInstance().getDoctors(token, null, null, null, null)
                 .enqueue(new Callback<List<Doctor>>() {
@@ -96,6 +104,7 @@ public class DoctorsFragment extends Fragment {
                                 Log.d(TAG, String.valueOf(code));
                                 doctors = response.body();
                                 doctorAdapter.swap(doctors);
+
                                 break;
                             default:
                                 Log.e(TAG, String.valueOf(code));
@@ -105,10 +114,13 @@ public class DoctorsFragment extends Fragment {
                                     Log.e(TAG, e.getMessage());
                                 }
                         }
+
+                        progressDialog.dismiss();
                     }
 
                     @Override
                     public void onFailure(Call<List<Doctor>> call, Throwable t) {
+                        progressDialog.dismiss();
                         Snackbar.make(getActivity().getCurrentFocus(), t.getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
                 });
