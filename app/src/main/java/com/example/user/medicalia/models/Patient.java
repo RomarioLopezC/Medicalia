@@ -27,12 +27,12 @@ public class Patient {
     @SerializedName("gender")
     @Expose
     private String gender;
-    @SerializedName("user")
+    @SerializedName("user_attributes")
     @Expose
-    private User user;
+    private UserAttributes userAttributes;
 
     public Patient(String name, String lastname, String email, String password, String passwordConfirm, String number){
-        this.user = new User(name,lastname,password,passwordConfirm,email,number);
+        this.userAttributes = new UserAttributes(name,lastname,password,passwordConfirm,email,number);
     }
 
     /**
@@ -148,17 +148,17 @@ public class Patient {
      * @return
      *     The user
      */
-    public User getUser() {
-        return user;
+    public UserAttributes getUserAttributes() {
+        return userAttributes;
     }
 
     /**
      * 
-     * @param user
+     * @param userAttributes
      *     The user
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserAttributes(UserAttributes userAttributes) {
+        this.userAttributes = userAttributes;
     }
 
 }

@@ -26,9 +26,9 @@ public class Doctor {
     @SerializedName("office_phone_number")
     @Expose
     private Object officePhoneNumber;
-    @SerializedName("user")
+    @SerializedName("user_attributes")
     @Expose
-    private User user;
+    private UserAttributes userAttributes;
 
     /**
      *
@@ -143,17 +143,17 @@ public class Doctor {
      * @return
      * The user
      */
-    public User getUser() {
-        return user;
+    public UserAttributes getUserAttributes() {
+        return userAttributes;
     }
 
     /**
      *
-     * @param user
+     * @param userAttributes
      * The user
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserAttributes(UserAttributes userAttributes) {
+        this.userAttributes = userAttributes;
     }
 
 }

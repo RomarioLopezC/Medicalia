@@ -92,7 +92,7 @@ public class DoctorsFragment extends Fragment {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
 
-        String token = "Token token=" + currentUser.getUser().getToken();
+        String token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
         DoctorAPI.Factory.getInstance().getDoctors(token, null, null, null, null)
                 .enqueue(new Callback<List<Doctor>>() {
                     @Override

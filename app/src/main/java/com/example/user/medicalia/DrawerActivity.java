@@ -72,8 +72,8 @@ public class DrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        textView_pacient_name.setText(currentUser.getUser().getName());
-        textView_pacient_email.setText(currentUser.getUser().getEmail());
+        textView_pacient_name.setText(currentUser.getUserAttributes().getName());
+        textView_pacient_email.setText(currentUser.getUserAttributes().getEmail());
     }
 
     @Override

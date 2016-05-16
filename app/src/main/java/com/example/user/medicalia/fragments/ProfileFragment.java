@@ -60,10 +60,10 @@ public class ProfileFragment extends Fragment {
         String jsonUser = getArguments().getString("user", "");
         currentUser = Utils.toUserAtributtes(jsonUser);
 
-        String fullname = currentUser.getUser().getName() + " " + currentUser.getUser().getLastname();
+        String fullname = currentUser.getUserAttributes().getName() + " " + currentUser.getUserAttributes().getLastname();
         textView_name.setText(fullname);
-        textView_email.setText(currentUser.getUser().getEmail());
-        textView_phone.setText(currentUser.getUser().getMobile());
+        textView_email.setText(currentUser.getUserAttributes().getEmail());
+        textView_phone.setText(currentUser.getUserAttributes().getMobile());
         textView_blood_type.setText(currentUser.getBloodType());
         textView_birthday.setText(currentUser.getBirthday());
         String height = String.valueOf(currentUser.getHeight()) + " cm";

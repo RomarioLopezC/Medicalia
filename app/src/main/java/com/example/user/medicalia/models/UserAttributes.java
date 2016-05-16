@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class User {
+public class UserAttributes {
 
     @SerializedName("email")
     @Expose
@@ -34,7 +34,7 @@ public class User {
     @Expose
     private Object userType;
 
-    public User(String name, String lastname, String password, String passwordConfirmation, String email, String mobile){
+    public UserAttributes(String name, String lastname, String password, String passwordConfirmation, String email, String mobile){
         this.email = email;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
