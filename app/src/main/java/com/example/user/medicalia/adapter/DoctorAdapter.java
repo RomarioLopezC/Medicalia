@@ -33,6 +33,12 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         this.doctorsList = doctorsList;
     }
 
+    public void swap(List<Doctor> doctorsList){
+        this.doctorsList.clear();
+        this.doctorsList.addAll(doctorsList);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_doctor, parent, false);
@@ -42,7 +48,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Doctor currentDoctor = doctorsList.get(position);
-        holder.txt_name.setText(currentDoctor.getName());
+        holder.txt_name.setText(currentDoctor.getUser().getName());
     }
 
     @Override

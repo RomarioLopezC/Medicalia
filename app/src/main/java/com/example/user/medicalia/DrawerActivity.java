@@ -115,17 +115,17 @@ public class DrawerActivity extends AppCompatActivity
         int id = item.getItemId();
         boolean fragmentTransaction = false;
         Fragment fragment = null;
+        Bundle bundle = new Bundle();
+        bundle.putString("user", jsonCurrentUser);
 
         if (id == R.id.nav_camera) {
-
             fragment = new ProfileFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("user", jsonCurrentUser);
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
         } else if (id == R.id.find_by_name) {
             fragment = new DoctorsFragment();
+            fragment.setArguments(bundle);
             fragmentTransaction = true;
 
         } else if (id == R.id.nav_slideshow) {

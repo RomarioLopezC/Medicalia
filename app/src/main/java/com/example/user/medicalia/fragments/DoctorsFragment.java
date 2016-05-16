@@ -1,23 +1,32 @@
 package com.example.user.medicalia.fragments;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.user.medicalia.R;
+import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.adapter.DoctorAdapter;
 import com.example.user.medicalia.models.Doctor;
+import com.example.user.medicalia.models.Patient;
+import com.example.user.medicalia.remote.DoctorAPI;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +36,12 @@ import butterknife.ButterKnife;
  */
 public class DoctorsFragment extends Fragment {
 
+    private static final String TAG = DoctorsFragment.class.getSimpleName();
     private OnFragmentInteractionListener mListener;
+    private Patient currentUser;
+    public List<Doctor> doctors;
+    private Activity activity;
+    private DoctorAdapter doctorAdapter;
 
     @Bind(R.id.recycler_view_doctors)
     public RecyclerView recyclerViewDoctores;
@@ -42,9 +56,15 @@ public class DoctorsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_doctors, container, false);
         ButterKnife.bind(this, view);
 
-        DoctorAdapter doctorAdapter = new DoctorAdapter(this.getActivity(), getListDoctors());
+        String jsonUser = getArguments().getString("user", "");
+        currentUser = Utils.toUserAtributtes(jsonUser);
+        activity = this.getActivity();
+
+        getListDoctors();
+
+        doctorAdapter = new DoctorAdapter(activity, doctors);
         recyclerViewDoctores.setHasFixedSize(true);
-        recyclerViewDoctores.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        recyclerViewDoctores.setLayoutManager(new LinearLayoutManager(activity));
         recyclerViewDoctores.setAdapter(doctorAdapter);
 
         return view;
@@ -63,15 +83,35 @@ public class DoctorsFragment extends Fragment {
         mListener = null;
     }
 
-    public List<Doctor> getListDoctors() {
-        List<Doctor> doctors =  new ArrayList<Doctor>();
-        doctors.add(new Doctor("Oscar Perez"));
-        doctors.add(new Doctor("Kevin Pacheco"));
-        doctors.add(new Doctor("Astrid Briceño"));
-        doctors.add(new Doctor("Melissa Gonzales"));
-        doctors.add(new Doctor("Romario Lopez"));
-        doctors.add(new Doctor("Victor Sosa"));
-        return doctors;
+    public void getListDoctors() {
+        String token = "Token token=" + currentUser.getUser().getToken();
+        DoctorAPI.Factory.getInstance().getDoctors(token, null, null, null, null)
+                .enqueue(new Callback<List<Doctor>>() {
+                    @Override
+                    public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
+                        int code = response.code();
+
+                        switch (code){
+                            case 200:
+                                Log.d(TAG, String.valueOf(code));
+                                doctors = response.body();
+                                doctorAdapter.swap(doctors);
+                                break;
+                            default:
+                                Log.e(TAG, String.valueOf(code));
+                                try {
+                                    Snackbar.make(getActivity().getCurrentFocus(), "Error del Servidor" + response.errorBody().string(), Snackbar.LENGTH_SHORT).show();
+                                } catch (IOException e) {
+                                    Log.e(TAG, e.getMessage());
+                                }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Doctor>> call, Throwable t) {
+                        Snackbar.make(getActivity().getCurrentFocus(), t.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     /**
