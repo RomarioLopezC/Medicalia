@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,9 +45,13 @@ public class DoctorsFragment extends Fragment {
     private Activity activity;
     private DoctorAdapter doctorAdapter;
     private ProgressDialog progressDialog;
+    private String token;
 
     @Bind(R.id.recycler_view_doctors)
     public RecyclerView recyclerViewDoctores;
+
+    @Bind(R.id.mSearch)
+    public SearchView searchView;
 
     public DoctorsFragment() {
         // Required empty public constructor
@@ -62,7 +67,23 @@ public class DoctorsFragment extends Fragment {
         currentUser = Utils.toUserAtributtes(jsonUser);
         activity = this.getActivity();
 
+        token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
+
         getListDoctors();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                DoctorAPI.Factory.getInstance().getDoctors(token, query, null, null, null)
+                        .enqueue(mCallback);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         doctorAdapter = new DoctorAdapter(activity, doctors);
         recyclerViewDoctores.setHasFixedSize(true);
@@ -92,39 +113,40 @@ public class DoctorsFragment extends Fragment {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
 
-        String token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
         DoctorAPI.Factory.getInstance().getDoctors(token, null, null, null, null)
-                .enqueue(new Callback<List<Doctor>>() {
-                    @Override
-                    public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
-                        int code = response.code();
-
-                        switch (code){
-                            case 200:
-                                Log.d(TAG, String.valueOf(code));
-                                doctors = response.body();
-                                doctorAdapter.swap(doctors);
-
-                                break;
-                            default:
-                                Log.e(TAG, String.valueOf(code));
-                                try {
-                                    Snackbar.make(getActivity().getCurrentFocus(), "Error del Servidor" + response.errorBody().string(), Snackbar.LENGTH_SHORT).show();
-                                } catch (IOException e) {
-                                    Log.e(TAG, e.getMessage());
-                                }
-                        }
-
-                        progressDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Doctor>> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Snackbar.make(getActivity().getCurrentFocus(), t.getMessage(), Snackbar.LENGTH_SHORT).show();
-                    }
-                });
+                .enqueue(mCallback);
     }
+
+    public Callback<List<Doctor>> mCallback = new Callback<List<Doctor>>() {
+        @Override
+        public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
+            int code = response.code();
+
+            switch (code){
+                case 200:
+                    Log.d(TAG, String.valueOf(code));
+                    doctors = response.body();
+                    doctorAdapter.swap(doctors);
+
+                    break;
+                default:
+                    Log.e(TAG, String.valueOf(code));
+                    try {
+                        Snackbar.make(getActivity().getCurrentFocus(), "Error del Servidor" + response.errorBody().string(), Snackbar.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+            }
+
+            progressDialog.dismiss();
+        }
+
+        @Override
+        public void onFailure(Call<List<Doctor>> call, Throwable t) {
+            progressDialog.dismiss();
+            Snackbar.make(getActivity().getCurrentFocus(), t.getMessage(), Snackbar.LENGTH_SHORT).show();
+        }
+    };
 
     /**
      * This interface must be implemented by activities that contain this
