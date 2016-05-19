@@ -39,6 +39,11 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void add(List<Doctor> doctorsList){
+        this.doctorsList.addAll(doctorsList);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_doctor, parent, false);

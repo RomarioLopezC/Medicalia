@@ -38,6 +38,8 @@ import retrofit2.Response;
  */
 public class DoctorsFragment extends Fragment {
 
+    public static int PAGE_SIZE = 10;
+
     private static final String TAG = DoctorsFragment.class.getSimpleName();
     private OnFragmentInteractionListener mListener;
     private Patient currentUser;
@@ -46,6 +48,11 @@ public class DoctorsFragment extends Fragment {
     private DoctorAdapter doctorAdapter;
     private ProgressDialog progressDialog;
     private String token;
+    private LinearLayoutManager mLayoutManager;
+    private boolean mIsLastPage = false;
+    private boolean mIsLoading = false;
+    private int mCurrentPage = 1;
+    private String mCurrentQuery = "";
 
     @Bind(R.id.recycler_view_doctors)
     public RecyclerView recyclerViewDoctores;
@@ -74,8 +81,13 @@ public class DoctorsFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                DoctorAPI.Factory.getInstance().getDoctors(token, query, null, null, null)
-                        .enqueue(mCallback);
+                mCurrentQuery = query;
+
+                DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, null)
+                        .enqueue(mCallbackFirsPage);
+
+                mIsLastPage = false;
+                mCurrentPage = 1;
                 return false;
             }
 
@@ -87,8 +99,12 @@ public class DoctorsFragment extends Fragment {
 
         doctorAdapter = new DoctorAdapter(activity, doctors);
         recyclerViewDoctores.setHasFixedSize(true);
-        recyclerViewDoctores.setLayoutManager(new LinearLayoutManager(activity));
+        mLayoutManager = new LinearLayoutManager(activity);
+        recyclerViewDoctores.setLayoutManager(mLayoutManager);
         recyclerViewDoctores.setAdapter(doctorAdapter);
+
+        // Pagination
+        recyclerViewDoctores.setOnScrollListener(mRecyclerViewOnScrollListener);
 
         return view;
     }
@@ -113,11 +129,11 @@ public class DoctorsFragment extends Fragment {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
 
-        DoctorAPI.Factory.getInstance().getDoctors(token, null, null, null, null)
-                .enqueue(mCallback);
+        DoctorAPI.Factory.getInstance().getDoctors(token, null, null, null, String.valueOf(mCurrentPage))
+                .enqueue(mCallbackFirsPage);
     }
 
-    public Callback<List<Doctor>> mCallback = new Callback<List<Doctor>>() {
+    public Callback<List<Doctor>> mCallbackFirsPage = new Callback<List<Doctor>>() {
         @Override
         public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
             int code = response.code();
@@ -147,6 +163,85 @@ public class DoctorsFragment extends Fragment {
             Snackbar.make(getActivity().getCurrentFocus(), t.getMessage(), Snackbar.LENGTH_SHORT).show();
         }
     };
+
+    public Callback<List<Doctor>> mCallbackNextPage = new Callback<List<Doctor>>() {
+        @Override
+        public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
+            int code = response.code();
+
+            switch (code){
+                case 200:
+                    Log.d(TAG, String.valueOf(code));
+                    doctors = response.body();
+                    mIsLoading = false;
+                    if (!doctors.isEmpty()){
+                        doctorAdapter.add(doctors);
+                    }else{
+                        mIsLastPage = true;
+                        Snackbar.make(getActivity().getCurrentFocus(), "No hay más doctores", Snackbar.LENGTH_SHORT).show();
+                    }
+
+                    break;
+                default:
+                    Log.e(TAG, String.valueOf(code));
+                    try {
+                        Snackbar.make(getActivity().getCurrentFocus(), "Error del Servidor" + response.errorBody().string(), Snackbar.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+            }
+
+            progressDialog.dismiss();
+        }
+
+        @Override
+        public void onFailure(Call<List<Doctor>> call, Throwable t) {
+            progressDialog.dismiss();
+            Snackbar.make(getActivity().getCurrentFocus(), t.getMessage(), Snackbar.LENGTH_SHORT).show();
+        }
+    };
+
+    private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = mLayoutManager.getChildCount();
+            int totalItemCount = mLayoutManager.getItemCount();
+            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+
+
+            if (!mIsLoading && !mIsLastPage) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= PAGE_SIZE) {
+                    mCurrentPage++;
+                    loadMoreItems();
+                }
+            }
+
+
+        }
+    };
+
+    public void loadMoreItems() {
+        progressDialog = new ProgressDialog(getActivity(),
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        mIsLoading = true;
+
+        DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, String.valueOf(mCurrentPage))
+                .enqueue(mCallbackNextPage);
+    }
+
+
+
 
     /**
      * This interface must be implemented by activities that contain this
