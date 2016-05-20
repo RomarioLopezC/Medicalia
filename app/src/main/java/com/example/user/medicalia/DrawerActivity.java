@@ -118,7 +118,7 @@ public class DrawerActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.user_key), jsonCurrentUser);
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.profile) {
             fragment = new ProfileFragment();
             fragment.setArguments(bundle);
             fragmentTransaction = true;
@@ -129,10 +129,19 @@ public class DrawerActivity extends AppCompatActivity
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.find_by_hospital) {
+            fragment = new DoctorsFragment();
+            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_hospital));
+            fragment.setArguments(bundle);
+            fragmentTransaction = true;
 
-        } else if (id == R.id.nav_logout) {
+        } else if (id == R.id.find_by_specialty) {
+            fragment = new DoctorsFragment();
+            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_specialty));
+            fragment.setArguments(bundle);
+            fragmentTransaction = true;
 
+        } else if (id == R.id.nav_logout){
             SharedPreferences.Editor edit = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND).edit();
             edit.clear();
             edit.apply();

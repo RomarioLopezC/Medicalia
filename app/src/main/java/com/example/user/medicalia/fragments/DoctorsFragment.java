@@ -94,7 +94,7 @@ public class DoctorsFragment extends Fragment {
                 mCurrentQuery = query;
                 mIsLastPage = false;
                 mCurrentPage = 1;
-
+                showLoadingDialog();
                 fetchDoctors(mCallbackFirsPage);
                 return false;
             }
@@ -131,13 +131,17 @@ public class DoctorsFragment extends Fragment {
     }
 
     public void getListDoctors() {
+        showLoadingDialog();
+        fetchDoctors(mCallbackFirsPage);
+    }
+
+    private void showLoadingDialog() {
         progressDialog = new ProgressDialog(getActivity(),
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
-
-        fetchDoctors(mCallbackFirsPage);
+        mIsLoading = true;
     }
 
     public void fetchDoctors(Callback<List<Doctor>> callback){
@@ -147,6 +151,14 @@ public class DoctorsFragment extends Fragment {
                 DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, String.valueOf(mCurrentPage))
                         .enqueue(callback);
                 break;
+            case "SPECIALTY":
+                DoctorAPI.Factory.getInstance().getDoctors(token, null, mCurrentQuery, null, String.valueOf(mCurrentPage))
+                        .enqueue(callback);
+                break;
+            case "HOSPITAL":
+                DoctorAPI.Factory.getInstance().getDoctors(token, null, null, mCurrentQuery, String.valueOf(mCurrentPage))
+                        .enqueue(callback);
+                break;
         }
     }
 
@@ -154,6 +166,7 @@ public class DoctorsFragment extends Fragment {
         @Override
         public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
             int code = response.code();
+            mIsLoading = false;
 
             switch (code){
                 case 200:
@@ -185,12 +198,12 @@ public class DoctorsFragment extends Fragment {
         @Override
         public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
             int code = response.code();
+            mIsLoading = false;
 
             switch (code){
                 case 200:
                     Log.d(TAG, String.valueOf(code));
                     doctors = response.body();
-                    mIsLoading = false;
                     if (!doctors.isEmpty()){
                         doctorAdapter.add(doctors);
                     }else{
@@ -246,13 +259,7 @@ public class DoctorsFragment extends Fragment {
     };
 
     public void loadMoreItems() {
-        progressDialog = new ProgressDialog(getActivity(),
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();
-        mIsLoading = true;
-
+        showLoadingDialog();
         fetchDoctors(mCallbackNextPage);
     }
 
