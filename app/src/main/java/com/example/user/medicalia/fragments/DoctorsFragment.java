@@ -95,8 +95,6 @@ public class DoctorsFragment extends Fragment {
                 mIsLastPage = false;
                 mCurrentPage = 1;
 
-                //Toast.makeText(getActivity(), "CurrentQuery: " + mCurrentQuery + "\n" + "query: " + query, Toast.LENGTH_SHORT).show();
-
                 fetchDoctors(mCallbackFirsPage);
                 return false;
             }
