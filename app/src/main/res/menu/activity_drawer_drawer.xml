@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/profile"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/user"
             android:title="@string/profile" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/calendar"
             android:title="@string/calendar" />
         <item
             android:id="@+id/nav_logout"
@@ -24,11 +24,11 @@
                 android:title="@string/find_by_name" />
             <item
                 android:id="@+id/find_by_hospital"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/hostpitalbuilding"
                 android:title="@string/find_by_hospital" />
             <item
                 android:id="@+id/find_by_specialty"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/stethoscope"
                 android:title="@string/find_by_specialty" />
         </menu>
     </item>
