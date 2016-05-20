@@ -116,7 +116,7 @@ public class DrawerActivity extends AppCompatActivity
         boolean fragmentTransaction = false;
         Fragment fragment = null;
         Bundle bundle = new Bundle();
-        bundle.putString("user", jsonCurrentUser);
+        bundle.putString(getString(R.string.user_key), jsonCurrentUser);
 
         if (id == R.id.nav_camera) {
             fragment = new ProfileFragment();
@@ -125,6 +125,7 @@ public class DrawerActivity extends AppCompatActivity
 
         } else if (id == R.id.find_by_name) {
             fragment = new DoctorsFragment();
+            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_name));
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 

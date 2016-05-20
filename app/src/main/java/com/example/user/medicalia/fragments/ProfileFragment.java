@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
 
-        String jsonUser = getArguments().getString("user", "");
+        String jsonUser = getArguments().getString(getString(R.string.user_key), "");
         currentUser = Utils.toUserAtributtes(jsonUser);
 
         String fullname = currentUser.getUserAttributes().getName() + " " + currentUser.getUserAttributes().getLastname();

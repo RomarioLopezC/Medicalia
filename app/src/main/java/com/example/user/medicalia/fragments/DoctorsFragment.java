@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,6 +54,7 @@ public class DoctorsFragment extends Fragment {
     private boolean mIsLoading = false;
     private int mCurrentPage = 1;
     private String mCurrentQuery = "";
+    private String mFindBy;
 
     @Bind(R.id.recycler_view_doctors)
     public RecyclerView recyclerViewDoctores;
@@ -65,12 +67,20 @@ public class DoctorsFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFindBy = getArguments().getString(getString(R.string.find_by_key), "");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doctors, container, false);
         ButterKnife.bind(this, view);
 
-        String jsonUser = getArguments().getString("user", "");
+        String jsonUser = getArguments().getString(getString(R.string.user_key), "");
+
+
         currentUser = Utils.toUserAtributtes(jsonUser);
         activity = this.getActivity();
 
@@ -82,12 +92,12 @@ public class DoctorsFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mCurrentQuery = query;
-
-                DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, null)
-                        .enqueue(mCallbackFirsPage);
-
                 mIsLastPage = false;
                 mCurrentPage = 1;
+
+                //Toast.makeText(getActivity(), "CurrentQuery: " + mCurrentQuery + "\n" + "query: " + query, Toast.LENGTH_SHORT).show();
+
+                fetchDoctors(mCallbackFirsPage);
                 return false;
             }
 
@@ -129,8 +139,17 @@ public class DoctorsFragment extends Fragment {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
 
-        DoctorAPI.Factory.getInstance().getDoctors(token, null, null, null, String.valueOf(mCurrentPage))
-                .enqueue(mCallbackFirsPage);
+        fetchDoctors(mCallbackFirsPage);
+    }
+
+    public void fetchDoctors(Callback<List<Doctor>> callback){
+        switch (mFindBy){
+
+            case "NAME":
+                DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, String.valueOf(mCurrentPage))
+                        .enqueue(callback);
+                break;
+        }
     }
 
     public Callback<List<Doctor>> mCallbackFirsPage = new Callback<List<Doctor>>() {
@@ -236,8 +255,7 @@ public class DoctorsFragment extends Fragment {
         progressDialog.show();
         mIsLoading = true;
 
-        DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, String.valueOf(mCurrentPage))
-                .enqueue(mCallbackNextPage);
+        fetchDoctors(mCallbackNextPage);
     }
 
 
