@@ -3,11 +3,14 @@ package com.example.user.medicalia.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.user.medicalia.DrawerActivity;
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.models.Patient;
@@ -43,7 +46,8 @@ public class ProfileFragment extends Fragment {
     @Bind(R.id.textView_gender)
     public TextView textView_gender;
 
-
+    public DrawerActivity drawerActivity = null;
+    public Toolbar toolbar = null;
     private OnFragmentInteractionListener mListener;
     private Patient currentUser;
 
@@ -56,6 +60,17 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
+
+        drawerActivity = (DrawerActivity) getActivity();
+
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        drawerActivity.setSupportActionBar(toolbar);
+        drawerActivity.getSupportActionBar().setTitle(getString(R.string.profile));
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerActivity.drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
         String jsonUser = getArguments().getString(getString(R.string.user_key), "");
         currentUser = Utils.toUserAtributtes(jsonUser);

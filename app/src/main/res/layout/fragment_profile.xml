@@ -1,308 +1,315 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.user.medicalia.fragments.ProfileFragment">
 
-    <LinearLayout
+    <include
+        android:id="@+id/bar_toolbar"
+        layout="@layout/bar_toolbar"></include>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="false">
 
         <LinearLayout
-            android:id="@+id/profile_header"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:background="@color/primary"
-            android:orientation="vertical"
-            android:elevation="10dp">
-
-            <ImageView
-                android:id="@+id/profile_picture"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:layout_margin="16dp"
-                android:src="@drawable/ic_fotoprefil1"
-                android:elevation="5dp" />
-
-            <TextView
-                android:id="@+id/profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:text="Profile Name"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/profile_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="profile@hotmail.com"
-                android:textColor="@android:color/white"
-                android:textSize="15sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/profile_information"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:layout_gravity="center"
             android:orientation="vertical">
 
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_phone"
-                android:layout_gravity="center"
+            <LinearLayout
+                android:id="@+id/profile_header"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                card_view:cardCornerRadius="4dp">
-
-                <LinearLayout
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Telefono"
-                        android:id="@+id/textView_label_phone"
-                        android:layout_marginTop="10dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="9999999"
-                        android:id="@+id/textView_phone" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_blood_type"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
+                android:background="@color/primary"
+                android:elevation="10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/profile_picture"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:elevation="5dp"
+                    android:src="@drawable/ic_fotoprefil1" />
+
+                <TextView
+                    android:id="@+id/profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:text="Profile Name"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/profile_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="profile@hotmail.com"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/profile_information"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                card_view:cardCornerRadius="4dp"
-                android:layout_marginTop="5dp">
-
-                <LinearLayout
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Tipo de Sangre"
-                        android:id="@+id/textView_label_blood_type"
-                        android:layout_marginTop="10dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="A+"
-                        android:id="@+id/textView_blood_type" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_birthday"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                card_view:cardCornerRadius="4dp"
-                android:layout_marginTop="5dp">
+                android:layout_margin="15dp"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_height="match_parent"
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_phone"
                     android:layout_width="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    card_view:cardCornerRadius="4dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Fecha de Nacimiento"
-                        android:id="@+id/textView_label_birthday"
-                        android:layout_marginTop="10dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text=" 14 de Diciember del 1990"
-                        android:id="@+id/textView_birthday" />
+                        <TextView
+                            android:id="@+id/textView_label_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Telefono"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="9999999"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                    </LinearLayout>
 
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_height"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                card_view:cardCornerRadius="4dp"
-                android:layout_marginTop="5dp">
+                </android.support.v7.widget.CardView>
 
-                <LinearLayout
-                    android:layout_height="match_parent"
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_blood_type"
                     android:layout_width="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    card_view:cardCornerRadius="4dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Altura"
-                        android:id="@+id/textView_label_height"
-                        android:layout_marginTop="10dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="1.74cm"
-                        android:id="@+id/textView_height" />
+                        <TextView
+                            android:id="@+id/textView_label_blood_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Tipo de Sangre"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView_blood_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A+"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                    </LinearLayout>
 
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_weight"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                card_view:cardCornerRadius="4dp"
-                android:layout_marginTop="5dp">
+                </android.support.v7.widget.CardView>
 
-                <LinearLayout
-                    android:layout_height="match_parent"
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_birthday"
                     android:layout_width="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    card_view:cardCornerRadius="4dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Peso"
-                        android:id="@+id/textView_label_weight"
-                        android:layout_marginTop="10dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="74kg"
-                        android:id="@+id/textView_weight" />
+                        <TextView
+                            android:id="@+id/textView_label_birthday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Fecha de Nacimiento"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView_birthday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" 14 de Diciember del 1990"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                    </LinearLayout>
 
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_allergies"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                card_view:cardCornerRadius="4dp"
-                android:layout_marginTop="5dp">
+                </android.support.v7.widget.CardView>
 
-                <LinearLayout
-                    android:layout_height="match_parent"
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_height"
                     android:layout_width="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    card_view:cardCornerRadius="4dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Alergias"
-                        android:id="@+id/textView_label_allergies"
-                        android:layout_marginTop="10dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Ninguna"
-                        android:id="@+id/textView_allergies" />
+                        <TextView
+                            android:id="@+id/textView_label_height"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Altura"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView_height"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1.74cm"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                    </LinearLayout>
 
-            <!-- A CardView that contains a TextView -->
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_gender"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                card_view:cardCornerRadius="4dp"
-                android:layout_marginTop="5dp">
+                </android.support.v7.widget.CardView>
 
-                <LinearLayout
-                    android:layout_height="match_parent"
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_weight"
                     android:layout_width="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    card_view:cardCornerRadius="4dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Sexo"
-                        android:id="@+id/textView_label_gender"
-                        android:layout_marginTop="10dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Masculino"
-                        android:id="@+id/textView_gender" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView_label_weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Peso"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            </android.support.v7.widget.CardView>
+                        <TextView
+                            android:id="@+id/textView_weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="74kg"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_allergies"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    card_view:cardCornerRadius="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView_label_allergies"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Alergias"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:id="@+id/textView_allergies"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ninguna"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <!-- A CardView that contains a TextView -->
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    card_view:cardCornerRadius="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView_label_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Sexo"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:id="@+id/textView_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Masculino"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
 
 
-</ScrollView>
 

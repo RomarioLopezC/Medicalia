@@ -6,11 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -27,6 +26,8 @@ import butterknife.ButterKnife;
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public NavigationView navigationView = null;
+    public DrawerLayout drawer = null;
     private String jsonCurrentUser;
 
     @Bind(R.id.textView_pacient_name)
@@ -61,20 +62,23 @@ public class DrawerActivity extends AppCompatActivity
 
         Patient currentUser = Utils.toUserAtributtes(jsonCurrentUser);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         textView_pacient_name.setText(currentUser.getUserAttributes().getName());
         textView_pacient_email.setText(currentUser.getUserAttributes().getEmail());
+
+        //Set the mainFragment
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.user_key), jsonCurrentUser);
+        ProfileFragment fragment = new ProfileFragment();
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_drawer, fragment);
+        fragmentTransaction.commit();
+
     }
 
     @Override
@@ -161,7 +165,6 @@ public class DrawerActivity extends AppCompatActivity
                     .commit();
 
             item.setChecked(true);
-            getSupportActionBar().setTitle(item.getTitle());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
