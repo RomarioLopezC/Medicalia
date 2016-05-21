@@ -21,7 +21,6 @@ import com.example.user.medicalia.models.Schedule;
 import com.example.user.medicalia.remote.ScheduleAPI;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
