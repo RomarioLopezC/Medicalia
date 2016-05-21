@@ -1,20 +1,20 @@
 package com.example.user.medicalia.fragments;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.medicalia.R;
+import com.example.user.medicalia.Utils.DateDialog;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.models.Patient;
 import com.example.user.medicalia.models.Schedule;
@@ -35,7 +35,7 @@ import retrofit2.Response;
  * {@link ScheduleFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class ScheduleFragment extends Fragment {
 
     private static final String TAG = ScheduleFragment.class.getSimpleName();
 
@@ -129,12 +129,9 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     @OnClick(R.id.button_calendar)
     public void changeDay(View view) {
         Toast.makeText(getActivity(), "Hola", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int day) {
-        String date = day+"-"+month+"-"+year;
-        textView_schedule.setText(date);
+        DateDialog dateDialog = new DateDialog();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        dateDialog.show(fragmentTransaction, "DatePicker");
     }
 
 
