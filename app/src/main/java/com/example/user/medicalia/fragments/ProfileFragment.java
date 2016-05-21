@@ -63,18 +63,19 @@ public class ProfileFragment extends Fragment {
 
         drawerActivity = (DrawerActivity) getActivity();
 
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        drawerActivity.setSupportActionBar(toolbar);
-        drawerActivity.getSupportActionBar().setTitle(getString(R.string.profile));
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerActivity.drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar(view);
 
         String jsonUser = getArguments().getString(getString(R.string.user_key), "");
         currentUser = Utils.toUserAtributtes(jsonUser);
 
+        setProfileData();
+
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void setProfileData() {
         String fullname = currentUser.getUserAttributes().getName() + " " + currentUser.getUserAttributes().getLastname();
         textView_name.setText(fullname);
         textView_email.setText(currentUser.getUserAttributes().getEmail());
@@ -87,10 +88,17 @@ public class ProfileFragment extends Fragment {
         textView_weight.setText(weight);
         textView_allergies.setText(currentUser.getAllergies());
         textView_gender.setText(currentUser.getGender());
+    }
 
+    private void setToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        drawerActivity.setSupportActionBar(toolbar);
+        drawerActivity.getSupportActionBar().setTitle(getString(R.string.profile));
 
-        // Inflate the layout for this fragment
-        return view;
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerActivity.drawer.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

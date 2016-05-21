@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.medicalia.DrawerActivity;
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.Utils.DateDialog;
 import com.example.user.medicalia.Utils.Utils;
@@ -39,6 +42,8 @@ public class ScheduleFragment extends Fragment {
 
     private static final String TAG = ScheduleFragment.class.getSimpleName();
 
+    public DrawerActivity drawerActivity = null;
+    public Toolbar toolbar = null;
     private Patient currentUser;
     private String token;
     private ProgressDialog progressDialog;
@@ -59,6 +64,10 @@ public class ScheduleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         ButterKnife.bind(this, view);
 
+        drawerActivity = (DrawerActivity) getActivity();
+
+        setToolbar(view);
+
         String jsonUser = getArguments().getString(getString(R.string.user_key), "");
         currentUser = Utils.toUserAtributtes(jsonUser);
         token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
@@ -67,6 +76,17 @@ public class ScheduleFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void setToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar_schedule);
+        drawerActivity.setSupportActionBar(toolbar);
+        drawerActivity.getSupportActionBar().setTitle(getString(R.string.calendar));
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerActivity.drawer.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
