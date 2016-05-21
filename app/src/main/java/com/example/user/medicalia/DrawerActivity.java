@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.fragments.DoctorsFragment;
 import com.example.user.medicalia.fragments.ProfileFragment;
+import com.example.user.medicalia.fragments.ScheduleFragment;
 import com.example.user.medicalia.models.Patient;
 
 import butterknife.Bind;
@@ -123,7 +124,12 @@ public class DrawerActivity extends AppCompatActivity
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
-        } else if (id == R.id.find_by_name) {
+        }else if (id == R.id.nav_calendar){
+            fragment = new ScheduleFragment();
+            fragment.setArguments(bundle);
+            fragmentTransaction = true;
+
+        }else if (id == R.id.find_by_name) {
             fragment = new DoctorsFragment();
             bundle.putString(getString(R.string.find_by_key), getString(R.string.by_name));
             fragment.setArguments(bundle);
