@@ -7,14 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.user.medicalia.DrawerActivity;
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.adapter.DoctorAdapter;
@@ -55,6 +58,8 @@ public class DoctorsFragment extends Fragment {
     private int mCurrentPage = 1;
     private String mCurrentQuery = "";
     private String mFindBy;
+    public DrawerActivity drawerActivity = null;
+    public Toolbar toolbar = null;
 
     @Bind(R.id.recycler_view_doctors)
     public RecyclerView recyclerViewDoctores;
@@ -78,8 +83,11 @@ public class DoctorsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_doctors, container, false);
         ButterKnife.bind(this, view);
 
-        String jsonUser = getArguments().getString(getString(R.string.user_key), "");
+        drawerActivity = (DrawerActivity) getActivity();
 
+        setToolbar(view);
+
+        String jsonUser = getArguments().getString(getString(R.string.user_key), "");
 
         currentUser = Utils.toUserAtributtes(jsonUser);
         activity = this.getActivity();
@@ -115,6 +123,17 @@ public class DoctorsFragment extends Fragment {
         recyclerViewDoctores.setOnScrollListener(mRecyclerViewOnScrollListener);
 
         return view;
+    }
+
+    private void setToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar_doctors);
+        drawerActivity.setSupportActionBar(toolbar);
+        drawerActivity.getSupportActionBar().setTitle(getString(R.string.find_doctors));
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerActivity.drawer.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
