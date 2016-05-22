@@ -10,6 +10,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,7 +30,6 @@ import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,6 +66,8 @@ public class ScheduleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         ButterKnife.bind(this, view);
 
+        setHasOptionsMenu(true);
+
         drawerActivity = (DrawerActivity) getActivity();
 
         setToolbar(view);
@@ -87,6 +91,29 @@ public class ScheduleFragment extends Fragment {
                 drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerActivity.drawer.setDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.schedule, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.show_schedule) {
+            changeDay();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -146,8 +173,8 @@ public class ScheduleFragment extends Fragment {
         progressDialog.show();
     }
 
-    @OnClick(R.id.button_calendar)
-    public void changeDay(View view) {
+
+    public void changeDay() {
         Toast.makeText(getActivity(), "Hola", Toast.LENGTH_SHORT).show();
         DateDialog dateDialog = new DateDialog();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
