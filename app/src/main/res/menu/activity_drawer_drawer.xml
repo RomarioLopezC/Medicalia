@@ -8,7 +8,7 @@
             android:title="@string/profile" />
         <item
             android:id="@+id/nav_calendar"
-            android:icon="@drawable/ic_action_calendar_month_black"
+            android:icon="@drawable/ic_date_range"
             android:title="@string/calendar" />
         <item
             android:id="@+id/nav_logout"

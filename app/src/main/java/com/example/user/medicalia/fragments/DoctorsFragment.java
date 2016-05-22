@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -64,7 +68,6 @@ public class DoctorsFragment extends Fragment {
     @Bind(R.id.recycler_view_doctors)
     public RecyclerView recyclerViewDoctores;
 
-    @Bind(R.id.mSearch)
     public SearchView searchView;
 
     public DoctorsFragment() {
@@ -83,6 +86,8 @@ public class DoctorsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_doctors, container, false);
         ButterKnife.bind(this, view);
 
+        setHasOptionsMenu(true);
+
         drawerActivity = (DrawerActivity) getActivity();
 
         setToolbar(view);
@@ -95,6 +100,49 @@ public class DoctorsFragment extends Fragment {
         token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
 
         getListDoctors();
+
+        doctorAdapter = new DoctorAdapter(activity, doctors);
+        recyclerViewDoctores.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(activity);
+        recyclerViewDoctores.setLayoutManager(mLayoutManager);
+        recyclerViewDoctores.setAdapter(doctorAdapter);
+
+        // Pagination
+        recyclerViewDoctores.setOnScrollListener(mRecyclerViewOnScrollListener);
+
+        return view;
+    }
+
+    private void setToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar_doctors);
+        drawerActivity.setSupportActionBar(toolbar);
+
+        switch (mFindBy){
+            case "Nombre":
+                drawerActivity.getSupportActionBar().setTitle(getString(R.string.by_name));
+                break;
+            case "Especialidad":
+                drawerActivity.getSupportActionBar().setTitle(getString(R.string.by_specialty));
+                break;
+            case "Hospital":
+                drawerActivity.getSupportActionBar().setTitle(getString(R.string.by_hospital));
+                break;
+        }
+
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerActivity.drawer.setDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.doctors, menu);
+        MenuItem searchItem = menu.findItem(R.id.mSearch);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setQueryHint("Buscar...");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -113,27 +161,8 @@ public class DoctorsFragment extends Fragment {
             }
         });
 
-        doctorAdapter = new DoctorAdapter(activity, doctors);
-        recyclerViewDoctores.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(activity);
-        recyclerViewDoctores.setLayoutManager(mLayoutManager);
-        recyclerViewDoctores.setAdapter(doctorAdapter);
 
-        // Pagination
-        recyclerViewDoctores.setOnScrollListener(mRecyclerViewOnScrollListener);
-
-        return view;
-    }
-
-    private void setToolbar(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar_doctors);
-        drawerActivity.setSupportActionBar(toolbar);
-        drawerActivity.getSupportActionBar().setTitle(getString(R.string.find_doctors));
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerActivity.drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -166,15 +195,15 @@ public class DoctorsFragment extends Fragment {
     public void fetchDoctors(Callback<List<Doctor>> callback){
         switch (mFindBy){
 
-            case "NAME":
+            case "Nombre":
                 DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, String.valueOf(mCurrentPage))
                         .enqueue(callback);
                 break;
-            case "SPECIALTY":
+            case "Especialidad":
                 DoctorAPI.Factory.getInstance().getDoctors(token, null, mCurrentQuery, null, String.valueOf(mCurrentPage))
                         .enqueue(callback);
                 break;
-            case "HOSPITAL":
+            case "Hospital":
                 DoctorAPI.Factory.getInstance().getDoctors(token, null, null, mCurrentQuery, String.valueOf(mCurrentPage))
                         .enqueue(callback);
                 break;
