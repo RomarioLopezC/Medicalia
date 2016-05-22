@@ -2,6 +2,7 @@ package com.example.user.medicalia.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -26,11 +27,6 @@ import butterknife.ButterKnife;
  */
 public class ProfileFragment extends Fragment {
 
-
-    @Bind(R.id.profile_name)
-    public TextView textView_name;
-    @Bind(R.id.profile_email)
-    public TextView textView_email;
     @Bind(R.id.textView_phone)
     public TextView textView_phone;
     @Bind(R.id.textView_blood_type)
@@ -58,7 +54,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.bar_toolbar_profile, container, false);
         ButterKnife.bind(this, view);
 
         drawerActivity = (DrawerActivity) getActivity();
@@ -68,17 +64,17 @@ public class ProfileFragment extends Fragment {
         String jsonUser = getArguments().getString(getString(R.string.user_key), "");
         currentUser = Utils.toUserAtributtes(jsonUser);
 
-        setProfileData();
+        String fullname = currentUser.getUserAttributes().getName() + " " + currentUser.getUserAttributes().getLastname();
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapse_toolbar);
+        collapsingToolbarLayout.setTitle(fullname);
 
+        setProfileData();
 
         // Inflate the layout for this fragment
         return view;
     }
 
     private void setProfileData() {
-        String fullname = currentUser.getUserAttributes().getName() + " " + currentUser.getUserAttributes().getLastname();
-        textView_name.setText(fullname);
-        textView_email.setText(currentUser.getUserAttributes().getEmail());
         textView_phone.setText(currentUser.getUserAttributes().getMobile());
         textView_blood_type.setText(currentUser.getBloodType());
         textView_birthday.setText(currentUser.getBirthday());
@@ -93,7 +89,7 @@ public class ProfileFragment extends Fragment {
     private void setToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         drawerActivity.setSupportActionBar(toolbar);
-        drawerActivity.getSupportActionBar().setTitle(getString(R.string.profile));
+        //drawerActivity.getSupportActionBar().setTitle(getString(R.string.profile));
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
