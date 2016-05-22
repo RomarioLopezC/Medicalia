@@ -47,6 +47,19 @@
                 android:hint="@string/lastname" />
         </android.support.design.widget.TextInputLayout>
 
+        <!-- Password Confirm Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/input_cellphone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:hint="@string/phone"/>
+        </android.support.design.widget.TextInputLayout>
+
         <!--  Email Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

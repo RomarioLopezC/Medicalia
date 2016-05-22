@@ -35,6 +35,7 @@
     <string name="saving_profile">Guardando perfil</string>
     <string name="genderInvalid">Genero invalido (M/H)</string>
     <string name="title_activity_drawer">DrawerActivity</string>
+    <string name="phone">Numero de telefono</string>
 
     <string name="token">"Token token="</string>
 

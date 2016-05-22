@@ -1,6 +1,7 @@
 package com.example.user.medicalia.remote;
 
 import com.example.user.medicalia.models.Patient;
+import com.example.user.medicalia.models.Registration;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,13 +18,13 @@ import retrofit2.http.Path;
  * Created by Kev' on 02/05/2016.
  */
 public interface PatientAPI {
-    String BASE_URL = "http://medicalia.herokuapp.com/";
+    String BASE_URL = "http://medicalia.herokuapp.com";
 
     @Headers("Content-Type: application/json")
-    @POST("api/patients")
-    Call<ResponseBody> register(@Body Patient patient);
+    @POST("/api/patients")
+    Call<ResponseBody> register(@Body Registration registration);
     @Headers("Content-Type: application/json")
-    @PATCH("api/patients/{id}")
+    @PATCH("/api/patients/{id}")
     Call<ResponseBody> update(@Header("Token") String token, @Path("id") int patientID, @Body Patient patient);
 
     class Factory {

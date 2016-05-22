@@ -32,7 +32,7 @@ public class Patient {
     private UserAttributes userAttributes;
 
     public Patient(String name, String lastname, String email, String password, String passwordConfirm, String number){
-        this.userAttributes = new UserAttributes(name,lastname,password,passwordConfirm,email,number);
+        this.userAttributes = new UserAttributes(name,lastname,email,password,passwordConfirm,number);
     }
 
     /**

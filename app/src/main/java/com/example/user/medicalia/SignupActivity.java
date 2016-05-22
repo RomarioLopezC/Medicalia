@@ -2,18 +2,20 @@ package com.example.user.medicalia;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.user.medicalia.models.Patient;
+import com.example.user.medicalia.models.Registration;
 import com.example.user.medicalia.remote.PatientAPI;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -29,6 +31,7 @@ public class SignupActivity extends AppCompatActivity {
 
     @Bind(R.id.input_name) EditText _nameText;
     @Bind(R.id.input_lastname) EditText _lastnameText;
+    @Bind(R.id.input_cellphone) EditText _phoneText;
     @Bind(R.id.input_email) EditText _emailText;
     @Bind(R.id.input_password) EditText _passwordText;
     @Bind(R.id.input_password_confirm) EditText _passwordConfirmText;
@@ -75,18 +78,14 @@ public class SignupActivity extends AppCompatActivity {
 
         String name = _nameText.getText().toString();
         String lastname = _lastnameText.getText().toString();
+        String phone = _phoneText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         String passwordConfirm = _passwordConfirmText.getText().toString();
 
-        TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-        String number = tm.getLine1Number();
+        Registration registration = new Registration(name,lastname,email,password,passwordConfirm, phone);
 
-        // TODO: Implement your own signup logic here.
-
-        Patient patient = new Patient(name,lastname,email,password,passwordConfirm, number);
-
-        PatientAPI.Factory.getInstance().register(patient).enqueue(new Callback<ResponseBody>() {
+        PatientAPI.Factory.getInstance().register(registration).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
                 final int code = response.code();
@@ -102,9 +101,23 @@ public class SignupActivity extends AppCompatActivity {
                                         break;
                                     case 422:
                                         try {
-                                            Log.e(TAG, response.errorBody().string());
-                                            onSignupFailed(response.errorBody().string());
+                                            Log.d(TAG,response.errorBody().string());
                                         } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        //String message = (String) o.get(getString(R.string.message_key));
+                                        //Log.e(TAG, message);
+                                        onSignupFailed("Registro fallido");
+                                        break;
+                                    default:
+                                        try {
+                                            Log.e(TAG, Integer.toString(code));
+
+                                            JSONObject o =  new JSONObject(response.errorBody().string());
+                                            String message = (String) o.get(getString(R.string.message_key));
+                                            Log.e(TAG, message);
+                                            onSignupFailed(message);
+                                        } catch (IOException | JSONException e) {
                                             Log.e(TAG, e.getMessage());
                                         }
                                         break;
@@ -130,7 +143,8 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed(String message) {
-        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+        Snackbar.make(getCurrentFocus(), message, Snackbar.LENGTH_SHORT).show();
+        //Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 
@@ -139,6 +153,7 @@ public class SignupActivity extends AppCompatActivity {
 
         String name = _nameText.getText().toString();
         String lastname = _lastnameText.getText().toString();
+        String phone = _phoneText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         String passwordConfirm = _passwordConfirmText.getText().toString();
@@ -155,6 +170,13 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         } else {
             _lastnameText.setError(null);
+        }
+
+        if (phone.isEmpty() || phone.length() < 5) {
+            _phoneText.setError(getString(R.string.at_leats_3_characters));
+            valid = false;
+        } else {
+            _phoneText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
