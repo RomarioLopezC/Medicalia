@@ -10,10 +10,10 @@
         layout="@layout/bar_toolbar_schedule"></include>
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/textView_schedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_schedule_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

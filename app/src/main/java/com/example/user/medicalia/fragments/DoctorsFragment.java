@@ -92,12 +92,7 @@ public class DoctorsFragment extends Fragment {
 
         setToolbar(view);
 
-        String jsonUser = getArguments().getString(getString(R.string.user_key), "");
-
-        currentUser = Utils.toUserAtributtes(jsonUser);
-        activity = this.getActivity();
-
-        token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
+        getUserData();
 
         getListDoctors();
 
@@ -111,6 +106,13 @@ public class DoctorsFragment extends Fragment {
         recyclerViewDoctores.setOnScrollListener(mRecyclerViewOnScrollListener);
 
         return view;
+    }
+
+    private void getUserData() {
+        String jsonUser = getArguments().getString(getString(R.string.user_key), "");
+        currentUser = Utils.toUserAtributtes(jsonUser);
+        activity = this.getActivity();
+        token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
     }
 
     private void setToolbar(View view) {
