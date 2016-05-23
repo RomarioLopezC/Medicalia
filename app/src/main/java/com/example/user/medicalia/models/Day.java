@@ -59,7 +59,7 @@ public class Day {
             }
 
             String hourString = String.valueOf(hour) +":"+String.valueOf(startMinutes);
-            hours.add(new Hour(hourString, hoursFormat, true));
+            hours.add(new Hour(hourString, hoursFormat, "Disponible"));
         }
     }
 

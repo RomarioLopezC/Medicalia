@@ -7,12 +7,12 @@ public class Hour {
 
     private String hour;
     private String hour_format;
-    private boolean availabe;
+    private String info;
 
-    public Hour(String hour, String hour_format, boolean availabe) {
+    public Hour(String hour, String hour_format, String info) {
         this.hour = hour;
         this.hour_format = hour_format;
-        this.availabe = availabe;
+        this.info = info;
     }
 
     public String getHour() {
@@ -31,11 +31,11 @@ public class Hour {
         this.hour_format = hour_format;
     }
 
-    public boolean isAvailabe() {
-        return availabe;
+    public String getInfo() {
+        return info;
     }
 
-    public void setAvailabe(boolean availabe) {
-        this.availabe = availabe;
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

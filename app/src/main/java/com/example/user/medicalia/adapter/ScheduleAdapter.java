@@ -41,6 +41,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         String hourFormat = currentHour.getHour();
         holder.textView_hour.setText(hourFormat);
         holder.textView_am.setText(currentHour.getHour_format());
+        holder.textView_available.setText(currentHour.getInfo());
     }
 
     @Override
