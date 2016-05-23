@@ -3,10 +3,12 @@ package com.example.user.medicalia.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class Doctor {
+public class Doctor implements Serializable{
 
     @SerializedName("rfc")
     @Expose
@@ -156,4 +158,38 @@ public class Doctor {
         this.userAttributes = userAttributes;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Doctor doctor = (Doctor) o;
+
+        if (rfc != null ? !rfc.equals(doctor.rfc) : doctor.rfc != null) return false;
+        if (specialty != null ? !specialty.equals(doctor.specialty) : doctor.specialty != null)
+            return false;
+        if (hospital != null ? !hospital.equals(doctor.hospital) : doctor.hospital != null)
+            return false;
+        if (office != null ? !office.equals(doctor.office) : doctor.office != null) return false;
+        if (address != null ? !address.equals(doctor.address) : doctor.address != null)
+            return false;
+        if (officePhoneNumber != null ? !officePhoneNumber.equals(doctor.officePhoneNumber) : doctor.officePhoneNumber != null)
+            return false;
+        if (userAttributes != null ? !userAttributes.equals(doctor.userAttributes) : doctor.userAttributes != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = rfc != null ? rfc.hashCode() : 0;
+        result = 31 * result + (specialty != null ? specialty.hashCode() : 0);
+        result = 31 * result + (hospital != null ? hospital.hashCode() : 0);
+        result = 31 * result + (office != null ? office.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (officePhoneNumber != null ? officePhoneNumber.hashCode() : 0);
+        result = 31 * result + (userAttributes != null ? userAttributes.hashCode() : 0);
+        return result;
+    }
 }
