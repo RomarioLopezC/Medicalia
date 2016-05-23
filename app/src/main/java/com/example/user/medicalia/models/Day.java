@@ -22,6 +22,8 @@ public class Day {
 
     private Calendar calendarStart;
     private Calendar calendarEnd;
+    private Calendar calendarStartLunch;
+    private Calendar calendarEndLunch;
     private SimpleDateFormat dateFormat;
 
     private int startHour;
@@ -29,28 +31,43 @@ public class Day {
     private int startMinutes;
     private int endMinutes;
 
+    private int startLunchHour;
+    private int endLunchHour;
+
     public Day(Schedule schedule) {
         hours = new ArrayList<>();
         calendarStart = GregorianCalendar.getInstance();
         calendarEnd = GregorianCalendar.getInstance();
+        calendarStartLunch = GregorianCalendar.getInstance();
+        calendarEndLunch = GregorianCalendar.getInstance();
         dateFormat = new SimpleDateFormat("yyy-MM-dd'T'HH:mm");
 
         setDateCalendar(schedule.getStart(), calendarStart);
         setDateCalendar(schedule.getEnd(), calendarEnd);
+        setDateCalendar(schedule.getStartLunch(), calendarStartLunch);
+        setDateCalendar(schedule.getEndLunch(), calendarEndLunch);
 
         startHour = calendarStart.get(Calendar.HOUR_OF_DAY);
         startMinutes = calendarStart.get(Calendar.MINUTE);
         endHour =  calendarEnd.get(Calendar.HOUR_OF_DAY);
         endMinutes = calendarEnd.get(Calendar.MINUTE);
+        startLunchHour = calendarStartLunch.get(Calendar.HOUR_OF_DAY);
+        endLunchHour = calendarEndLunch.get(Calendar.HOUR_OF_DAY);
 
         createListHours();
     }
 
     private void createListHours() {
         for (int i = startHour; i <= endHour; i++){
+            String info = "Disponible";
             String hoursFormat = AM;
             int hour = i;
 
+            if (hour >= startLunchHour && hour <= endLunchHour){
+                info = "Comida";
+            }
+
+            //Para ver si es AM o PM
             if (hour / 12 == 1){
                 if (hour != 12 ){
                     hour = i - 12;
@@ -58,13 +75,15 @@ public class Day {
                 hoursFormat = PM;
             }
 
+            //Para agregarle el 0 cuando sema multiplo de 10
             String minutes = String.valueOf(startMinutes);
             if (startMinutes % 10 == 0){
                 minutes = minutes + "0";
             }
 
+
             String hourString = String.valueOf(hour) +":"+minutes;
-            hours.add(new Hour(hourString, hoursFormat, "Disponible"));
+            hours.add(new Hour(hourString, hoursFormat, info));
         }
     }
 
