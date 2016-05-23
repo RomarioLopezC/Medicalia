@@ -156,7 +156,7 @@ public class ScheduleFragment extends Fragment {
     private void fetchSchedule() {
         showLoadingDialog();
         Toast.makeText(getActivity(), token, Toast.LENGTH_SHORT).show();
-        ScheduleAPI.Factory.getInstance().getSchedule(token, "4").enqueue(new Callback<Schedule>() {
+        ScheduleAPI.Factory.getInstance().getSchedule(token, "2").enqueue(new Callback<Schedule>() {
             @Override
             public void onResponse(Call<Schedule> call, Response<Schedule> response) {
                 int code = response.code();

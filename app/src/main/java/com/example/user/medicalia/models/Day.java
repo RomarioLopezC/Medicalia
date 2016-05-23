@@ -58,7 +58,12 @@ public class Day {
                 hoursFormat = PM;
             }
 
-            String hourString = String.valueOf(hour) +":"+String.valueOf(startMinutes);
+            String minutes = String.valueOf(startMinutes);
+            if (startMinutes % 10 == 0){
+                minutes = minutes + "0";
+            }
+
+            String hourString = String.valueOf(hour) +":"+minutes;
             hours.add(new Hour(hourString, hoursFormat, "Disponible"));
         }
     }
