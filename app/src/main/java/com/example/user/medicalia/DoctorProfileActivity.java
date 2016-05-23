@@ -1,8 +1,10 @@
 package com.example.user.medicalia;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+
+import com.example.user.medicalia.models.Doctor;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,5 +22,9 @@ public class DoctorProfileActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        Doctor currentDoctor = (Doctor) getIntent().getSerializableExtra("Doctor");
+
+        _doctorName.setText(currentDoctor.getUserAttributes().getName());
+        _doctorBio.setText(currentDoctor.getSpecialty());
     }
 }

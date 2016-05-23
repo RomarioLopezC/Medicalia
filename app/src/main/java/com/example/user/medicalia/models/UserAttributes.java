@@ -4,10 +4,12 @@ package com.example.user.medicalia.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class UserAttributes {
+public class UserAttributes implements Serializable{
 
     @SerializedName("email")
     @Expose
@@ -151,4 +153,40 @@ public class UserAttributes {
         this.userType = userType;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserAttributes that = (UserAttributes) o;
+
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null)
+            return false;
+        if (passwordConfirmation != null ? !passwordConfirmation.equals(that.passwordConfirmation) : that.passwordConfirmation != null)
+            return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (lastname != null ? !lastname.equals(that.lastname) : that.lastname != null)
+            return false;
+        if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
+        if (token != null ? !token.equals(that.token) : that.token != null) return false;
+        if (userType != null ? !userType.equals(that.userType) : that.userType != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = email != null ? email.hashCode() : 0;
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (passwordConfirmation != null ? passwordConfirmation.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+        result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+        result = 31 * result + (token != null ? token.hashCode() : 0);
+        result = 31 * result + (userType != null ? userType.hashCode() : 0);
+        return result;
+    }
 }

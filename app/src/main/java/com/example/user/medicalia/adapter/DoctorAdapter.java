@@ -1,6 +1,7 @@
 package com.example.user.medicalia.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.user.medicalia.DoctorProfileActivity;
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.models.Doctor;
 
@@ -52,8 +54,16 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Doctor currentDoctor = doctorsList.get(position);
+        final Doctor currentDoctor = doctorsList.get(position);
         holder.txt_name.setText(currentDoctor.getUserAttributes().getName());
+        holder.rl_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DoctorProfileActivity.class);
+                intent.putExtra("Doctor", currentDoctor);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

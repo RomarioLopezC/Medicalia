@@ -35,7 +35,9 @@
             android:label="@string/title_activity_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CompleteRegisterActivity" />
-        <activity android:name=".DoctorProfileActivity"></activity>
+        <activity 
+        	android:name=".DoctorProfileActivity"
+        	android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
