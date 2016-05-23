@@ -16,6 +16,8 @@ public class Day {
     private static final String DATE_FORMAT = "yyy-MM-dd'T'HH:mm";
     private static final String AM = "AM";
     private static final String PM = "PM";
+    public static final String AVAILABLE = "Disponible";
+    public static final String LUNCH = "Comida";
 
     private List<Hour> hours;
     private Schedule schedule;
@@ -59,12 +61,12 @@ public class Day {
 
     private void createListHours() {
         for (int i = startHour; i <= endHour; i++){
-            String info = "Disponible";
+            String info = AVAILABLE;
             String hoursFormat = AM;
             int hour = i;
 
             if (hour >= startLunchHour && hour <= endLunchHour){
-                info = "Comida";
+                info = LUNCH;
             }
 
             //Para ver si es AM o PM
