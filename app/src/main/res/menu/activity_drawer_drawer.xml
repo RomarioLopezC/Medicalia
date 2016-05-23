@@ -7,6 +7,10 @@
             android:icon="@drawable/user"
             android:title="@string/profile" />
         <item
+            android:id="@+id/diagnostics"
+            android:icon="@drawable/note_plus"
+            android:title="@string/diagnostics" />
+        <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_date_range"
             android:title="@string/calendar" />

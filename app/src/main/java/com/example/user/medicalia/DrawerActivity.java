@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.user.medicalia.Utils.Utils;
+import com.example.user.medicalia.fragments.DiagnosticsFragment;
 import com.example.user.medicalia.fragments.DoctorsFragment;
 import com.example.user.medicalia.fragments.ProfileFragment;
 import com.example.user.medicalia.fragments.ScheduleFragment;
@@ -133,6 +134,10 @@ public class DrawerActivity extends AppCompatActivity
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
+        }else if(id == R.id.diagnostics){
+            fragment = new DiagnosticsFragment();
+            fragment.setArguments(bundle);
+            fragmentTransaction = true;
         }else if (id == R.id.find_by_name) {
             fragment = new DoctorsFragment();
             bundle.putString(getString(R.string.find_by_key), getString(R.string.by_name));

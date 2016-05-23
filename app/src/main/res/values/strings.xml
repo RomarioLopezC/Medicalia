@@ -53,6 +53,7 @@
     <string name="find_by_specialty">Especialidad</string>
     <string name="profile">Perfil</string>
     <string name="calendar">Calendario</string>
+    <string name="diagnostics">Diagnosticos</string>
 
     <!-- Constantes-->
     <string name="name_shared_preferences">Medicalia</string>
