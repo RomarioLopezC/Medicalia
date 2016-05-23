@@ -24,16 +24,12 @@ import com.example.user.medicalia.R;
 import com.example.user.medicalia.Utils.DateDialog;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.adapter.ScheduleAdapter;
-import com.example.user.medicalia.models.Appointment;
 import com.example.user.medicalia.models.Day;
 import com.example.user.medicalia.models.Patient;
 import com.example.user.medicalia.models.Schedule;
-import com.example.user.medicalia.models.SpecialDay;
 import com.example.user.medicalia.remote.ScheduleAPI;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -82,11 +78,6 @@ public class ScheduleFragment extends Fragment {
         getUserData();
 
         setDay();
-
-        ScheduleAdapter scheduleAdapter = new ScheduleAdapter(drawerActivity, day.getHours());
-        recycler_view_schedule_day.setHasFixedSize(true);
-        recycler_view_schedule_day.setLayoutManager(new LinearLayoutManager(drawerActivity));
-        recycler_view_schedule_day.setAdapter(scheduleAdapter);
 
         return view;
     }
@@ -145,7 +136,8 @@ public class ScheduleFragment extends Fragment {
     }
 
     public void setDay() {
-        //fetchSchedule();
+        fetchSchedule();
+        /*
         List<SpecialDay> specialDays = new ArrayList<>();
         List<Appointment> appointments = new ArrayList<>();
 
@@ -158,6 +150,7 @@ public class ScheduleFragment extends Fragment {
                 specialDays, appointments);
 
         day = new Day(schedule);
+        */
     }
 
     private void fetchSchedule() {
@@ -172,6 +165,13 @@ public class ScheduleFragment extends Fragment {
                     case 200:
                         Log.d(TAG, String.valueOf(code));
                         Schedule schedule = response.body();
+                        day = new Day(schedule);
+
+                        ScheduleAdapter scheduleAdapter = new ScheduleAdapter(drawerActivity, day.getHours());
+                        recycler_view_schedule_day.setHasFixedSize(true);
+                        recycler_view_schedule_day.setLayoutManager(new LinearLayoutManager(drawerActivity));
+                        recycler_view_schedule_day.setAdapter(scheduleAdapter);
+
                         //textView_schedule.setText(schedule.getStart());
 
                         break;
