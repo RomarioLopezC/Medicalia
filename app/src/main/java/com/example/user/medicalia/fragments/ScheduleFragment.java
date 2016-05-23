@@ -1,11 +1,11 @@
 package com.example.user.medicalia.fragments;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.example.user.medicalia.DrawerActivity;
 import com.example.user.medicalia.R;
-import com.example.user.medicalia.Utils.DateDialog;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.adapter.ScheduleAdapter;
 import com.example.user.medicalia.models.Day;
@@ -30,6 +30,7 @@ import com.example.user.medicalia.models.Schedule;
 import com.example.user.medicalia.remote.ScheduleAPI;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,7 +44,7 @@ import retrofit2.Response;
  * {@link ScheduleFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ScheduleFragment extends Fragment {
+public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     private static final String TAG = ScheduleFragment.class.getSimpleName();
 
@@ -137,20 +138,6 @@ public class ScheduleFragment extends Fragment {
 
     public void setDay() {
         fetchSchedule();
-        /*
-        List<SpecialDay> specialDays = new ArrayList<>();
-        List<Appointment> appointments = new ArrayList<>();
-
-        String start = "2000-01-01T10:52:30.579Z";
-        String end = "2000-01-01T23:52:30.579Z";
-        String start_lunch = "2000-01-01T17:52:30.579Z";
-        String end_lunch = "2000-01-01T17:52:30.579Z";
-
-        Schedule schedule = new Schedule(start, end, start_lunch, end_lunch,
-                specialDays, appointments);
-
-        day = new Day(schedule);
-        */
     }
 
     private void fetchSchedule() {
@@ -165,14 +152,15 @@ public class ScheduleFragment extends Fragment {
                     case 200:
                         Log.d(TAG, String.valueOf(code));
                         Schedule schedule = response.body();
+
+                        //Puedo solo actualizar el adapter
+
                         day = new Day(schedule);
 
                         ScheduleAdapter scheduleAdapter = new ScheduleAdapter(drawerActivity, day.getHours());
                         recycler_view_schedule_day.setHasFixedSize(true);
                         recycler_view_schedule_day.setLayoutManager(new LinearLayoutManager(drawerActivity));
                         recycler_view_schedule_day.setAdapter(scheduleAdapter);
-
-                        //textView_schedule.setText(schedule.getStart());
 
                         break;
                     default:
@@ -206,10 +194,20 @@ public class ScheduleFragment extends Fragment {
 
 
     public void changeDay() {
-        Toast.makeText(getActivity(), "Hola", Toast.LENGTH_SHORT).show();
-        DateDialog dateDialog = new DateDialog();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        dateDialog.show(fragmentTransaction, "DatePicker");
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        datePickerDialog.show();
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        String date = day+"-"+month+"-"+year;
+        Toast.makeText(getActivity(), date, Toast.LENGTH_SHORT).show();
     }
 
 

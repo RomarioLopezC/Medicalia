@@ -19,6 +19,7 @@ public class Day {
     public static final String AVAILABLE = "Disponible";
     public static final String LUNCH = "Comida";
 
+
     private List<Hour> hours;
     private Schedule schedule;
 
@@ -37,6 +38,8 @@ public class Day {
     private int endLunchHour;
 
     public Day(Schedule schedule) {
+
+
         hours = new ArrayList<>();
         calendarStart = GregorianCalendar.getInstance();
         calendarEnd = GregorianCalendar.getInstance();
