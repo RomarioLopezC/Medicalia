@@ -38,7 +38,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Hour currentHour = hours.get(position);
-        String hourFormat = currentHour.getHour() + ":00";
+        String hourFormat = currentHour.getHour();
         holder.textView_hour.setText(hourFormat);
         holder.textView_am.setText(currentHour.getHour_format());
     }

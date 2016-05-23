@@ -149,8 +149,8 @@ public class ScheduleFragment extends Fragment {
         List<SpecialDay> specialDays = new ArrayList<>();
         List<Appointment> appointments = new ArrayList<>();
 
-        String start = "2000-01-01T17:52:30.579Z";
-        String end = "2000-01-01T17:52:30.579Z";
+        String start = "2000-01-01T10:52:30.579Z";
+        String end = "2000-01-01T23:52:30.579Z";
         String start_lunch = "2000-01-01T17:52:30.579Z";
         String end_lunch = "2000-01-01T17:52:30.579Z";
 

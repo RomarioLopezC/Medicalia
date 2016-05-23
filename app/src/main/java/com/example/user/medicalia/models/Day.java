@@ -26,6 +26,8 @@ public class Day {
 
     private int startHour;
     private int endHour;
+    private int startMinutes;
+    private int endMinutes;
 
     public Day(Schedule schedule) {
         hours = new ArrayList<>();
@@ -37,7 +39,9 @@ public class Day {
         setDateCalendar(schedule.getEnd(), calendarEnd);
 
         startHour = calendarStart.get(Calendar.HOUR_OF_DAY);
+        startMinutes = calendarStart.get(Calendar.MINUTE);
         endHour =  calendarEnd.get(Calendar.HOUR_OF_DAY);
+        endMinutes = calendarEnd.get(Calendar.MINUTE);
 
         createListHours();
     }
@@ -48,11 +52,14 @@ public class Day {
             int hour = i;
 
             if (hour / 12 == 1){
-                hour = i - 12;
+                if (hour != 12 ){
+                    hour = i - 12;
+                }
                 hoursFormat = PM;
             }
 
-            hours.add(new Hour(String.valueOf(hour), hoursFormat, true));
+            String hourString = String.valueOf(hour) +":"+String.valueOf(startMinutes);
+            hours.add(new Hour(hourString, hoursFormat, true));
         }
     }
 
