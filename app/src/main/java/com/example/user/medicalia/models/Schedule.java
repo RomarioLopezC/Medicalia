@@ -31,6 +31,15 @@ public class Schedule {
     @Expose
     private List<Appointment> appointments = new ArrayList<Appointment>();
 
+    public Schedule(String start, String end, String startLunch, String endLunch, List<SpecialDay> specialDays, List<Appointment> appointments) {
+        this.start = start;
+        this.end = end;
+        this.startLunch = startLunch;
+        this.endLunch = endLunch;
+        this.specialDays = specialDays;
+        this.appointments = appointments;
+    }
+
     /**
      * 
      * @return
