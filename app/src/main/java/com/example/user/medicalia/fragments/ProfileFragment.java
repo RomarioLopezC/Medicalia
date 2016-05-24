@@ -64,9 +64,9 @@ public class ProfileFragment extends Fragment {
         String jsonUser = getArguments().getString(getString(R.string.user_key), "");
         currentUser = Utils.toUserAtributtes(jsonUser);
 
-        String fullname = currentUser.getUserAttributes().getName() + " " + currentUser.getUserAttributes().getLastname();
+
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapse_toolbar);
-        collapsingToolbarLayout.setTitle(fullname);
+        collapsingToolbarLayout.setTitle(currentUser.getUserAttributes().getFullName());
 
         setProfileData();
 
