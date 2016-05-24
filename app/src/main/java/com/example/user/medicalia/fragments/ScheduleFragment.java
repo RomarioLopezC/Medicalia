@@ -271,8 +271,13 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     private void drawDayList(int year, int month, int day) {
         progressDialog.show();
 
+        List<Appointment> todayAppointments = new ArrayList<>();
         List<Hour> hours = normalDay.getHours();
         today.set(year, month, day);
+
+        for (Appointment appointment: appointments) {
+
+        }
 
         for (SpecialDay specialDay : specialDays) {
             Calendar otherCalendar = specialDay.getDayCalendar();

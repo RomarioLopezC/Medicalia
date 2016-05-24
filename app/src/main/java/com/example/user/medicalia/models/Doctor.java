@@ -10,6 +10,9 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Doctor implements Serializable{
 
+    @SerializedName("id")
+    @Expose
+    private int id;
     @SerializedName("rfc")
     @Expose
     private String rfc;
@@ -31,6 +34,24 @@ public class Doctor implements Serializable{
     @SerializedName("user_attributes")
     @Expose
     private UserAttributes userAttributes;
+
+    /**
+     *
+     * @return
+     * The id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id
+     * The id
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
     /**
      *
