@@ -260,6 +260,7 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
         int day = today.get(Calendar.DAY_OF_MONTH);
 
         datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
         datePickerDialog.show();
 
     }
