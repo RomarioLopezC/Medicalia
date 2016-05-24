@@ -110,8 +110,7 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_schedule);
         drawerActivity.setSupportActionBar(toolbar);
 
-        setTitle(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
-
+        drawerActivity.getSupportActionBar().setTitle("");
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -220,7 +219,7 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
                         normalDay = new Day(schedule);
 
-                        scheduleAdapter.swap(normalDay.getHours());
+                        drawDayList(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
 
                         break;
                     default:
@@ -265,6 +264,11 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
+        drawDayList(year, month, day);
+        datePickerDialog.dismiss();
+    }
+
+    private void drawDayList(int year, int month, int day) {
         progressDialog.show();
 
         List<Hour> hours = normalDay.getHours();
@@ -290,7 +294,6 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
         scheduleAdapter.swap(hours);
         setTitle(year, month, day);
-        datePickerDialog.dismiss();
         progressDialog.dismiss();
     }
 
