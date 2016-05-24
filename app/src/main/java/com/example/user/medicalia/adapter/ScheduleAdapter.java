@@ -29,6 +29,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         this.hours = hours;
     }
 
+    public void swap(List<Hour> hours){
+        this.hours.clear();
+        this.hours.addAll(hours);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_schedule, parent, false);

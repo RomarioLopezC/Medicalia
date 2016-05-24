@@ -18,18 +18,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
 import com.example.user.medicalia.DrawerActivity;
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.adapter.ScheduleAdapter;
 import com.example.user.medicalia.models.Day;
+import com.example.user.medicalia.models.Hour;
 import com.example.user.medicalia.models.Patient;
 import com.example.user.medicalia.models.Schedule;
 import com.example.user.medicalia.remote.ScheduleAPI;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.Bind;
@@ -56,12 +57,17 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     private Patient currentUser;
     private String token;
     private ProgressDialog progressDialog;
-    private Day day;
+    private Day normalDay;
+    private Calendar today;
+
+    private DatePickerDialog datePickerDialog;
 
     private OnFragmentInteractionListener mListener;
+    private ScheduleAdapter scheduleAdapter;
 
     public ScheduleFragment() {
         // Required empty public constructor
+        today = Calendar.getInstance();
     }
 
 
@@ -80,6 +86,11 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
         setDay();
 
+        scheduleAdapter = new ScheduleAdapter(drawerActivity, new ArrayList<Hour>());
+        recycler_view_schedule_day.setHasFixedSize(true);
+        recycler_view_schedule_day.setLayoutManager(new LinearLayoutManager(drawerActivity));
+        recycler_view_schedule_day.setAdapter(scheduleAdapter);
+
         return view;
     }
 
@@ -92,12 +103,58 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     private void setToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_schedule);
         drawerActivity.setSupportActionBar(toolbar);
-        drawerActivity.getSupportActionBar().setTitle(getString(R.string.calendar));
+
+        setTitle(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerActivity.drawer.setDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    private void setTitle(int year, int month, int day) {
+        String mes = "";
+        switch (month){
+            case 0:
+                mes = "Enero";
+                break;
+            case 1:
+                mes = "Febrero";
+                break;
+            case 2:
+                mes = "Marzo";
+                break;
+            case 3:
+                mes = "Abril";
+                break;
+            case 4:
+                mes = "Mayo";
+                break;
+            case 5:
+                mes = "Junio";
+                break;
+            case 6:
+                mes = "Julio";
+                break;
+            case 7:
+                mes = "Agosto";
+                break;
+            case 8:
+                mes = "Septiembre";
+                break;
+            case 9:
+                mes = "Octubre";
+                break;
+            case 10:
+                mes = "Noviembre";
+                break;
+            case 11:
+                mes = "Diciembre";
+        }
+
+        String title = day + " de " + mes;
+        drawerActivity.getSupportActionBar().setTitle(title);
     }
 
     @Override
@@ -142,7 +199,6 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
     private void fetchSchedule() {
         showLoadingDialog();
-        Toast.makeText(getActivity(), token, Toast.LENGTH_SHORT).show();
         ScheduleAPI.Factory.getInstance().getSchedule(token, "2").enqueue(new Callback<Schedule>() {
             @Override
             public void onResponse(Call<Schedule> call, Response<Schedule> response) {
@@ -153,14 +209,9 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
                         Log.d(TAG, String.valueOf(code));
                         Schedule schedule = response.body();
 
-                        //Puedo solo actualizar el adapter
+                        normalDay = new Day(schedule);
 
-                        day = new Day(schedule);
-
-                        ScheduleAdapter scheduleAdapter = new ScheduleAdapter(drawerActivity, day.getHours());
-                        recycler_view_schedule_day.setHasFixedSize(true);
-                        recycler_view_schedule_day.setLayoutManager(new LinearLayoutManager(drawerActivity));
-                        recycler_view_schedule_day.setAdapter(scheduleAdapter);
+                        scheduleAdapter.swap(normalDay.getHours());
 
                         break;
                     default:
@@ -194,20 +245,23 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
 
     public void changeDay() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
+        int year = today.get(Calendar.YEAR);
+        int month = today.get(Calendar.MONTH);
+        int day = today.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
         datePickerDialog.show();
 
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        String date = day+"-"+month+"-"+year;
-        Toast.makeText(getActivity(), date, Toast.LENGTH_SHORT).show();
+        progressDialog.show();
+        today.set(year, month, day);
+        scheduleAdapter.swap(normalDay.getHours());
+        setTitle(year, month, day);
+        datePickerDialog.dismiss();
+        progressDialog.dismiss();
     }
 
 
