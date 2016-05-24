@@ -2,6 +2,8 @@ package com.example.user.medicalia.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.user.medicalia.DoctorProfileActivity;
 import com.example.user.medicalia.R;
+import com.example.user.medicalia.fragments.DoctorProfileFragment;
 import com.example.user.medicalia.models.Doctor;
 
 import java.util.ArrayList;
@@ -59,9 +61,15 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         holder.rl_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, DoctorProfileActivity.class);
+
+                Intent intent = new Intent();
                 intent.putExtra("Doctor", currentDoctor);
-                context.startActivity(intent);
+
+                DoctorProfileFragment fragment = new DoctorProfileFragment();
+                fragment.setArguments(intent.getExtras());
+                FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.content_drawer, fragment);
+                fragmentTransaction.commit();
             }
         });
     }
