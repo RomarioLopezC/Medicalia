@@ -55,7 +55,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Doctor currentDoctor = doctorsList.get(position);
-        holder.txt_name.setText(currentDoctor.getUserAttributes().getName());
+        holder.txt_name.setText(currentDoctor.getUserAttributes().getFullName());
         holder.rl_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -189,4 +189,8 @@ public class UserAttributes implements Serializable{
         result = 31 * result + (userType != null ? userType.hashCode() : 0);
         return result;
     }
+
+    public String getFullName(){
+        return name + " " + lastname;
+    }
 }
