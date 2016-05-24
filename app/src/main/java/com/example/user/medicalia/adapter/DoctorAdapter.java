@@ -68,7 +68,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
                 DoctorProfileFragment fragment = new DoctorProfileFragment();
                 fragment.setArguments(intent.getExtras());
                 FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.content_drawer, fragment).addToBackStack(null);
+                fragmentTransaction.replace(R.id.content_drawer, fragment);
                 fragmentTransaction.commit();
             }
         });

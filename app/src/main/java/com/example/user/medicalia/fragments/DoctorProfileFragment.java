@@ -3,16 +3,21 @@ package com.example.user.medicalia.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.user.medicalia.DrawerActivity;
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.models.Doctor;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +28,8 @@ import butterknife.ButterKnife;
 public class DoctorProfileFragment extends Fragment {
 
     private static final String TAG = "DoctorProfile";
+    public DrawerActivity drawerActivity = null;
+    public Doctor currentDoctor;
 
     @Bind(R.id.user_profile_name)
     TextView _doctorName;
@@ -32,6 +39,7 @@ public class DoctorProfileFragment extends Fragment {
     @Bind(R.id.office) TextView _office;
 
     private OnFragmentInteractionListener mListener;
+    public Toolbar toolbar = null;
 
     public DoctorProfileFragment() {
         // Required empty public constructor
@@ -44,7 +52,13 @@ public class DoctorProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_doctor_profile, container, false);
         ButterKnife.bind(this,view);
 
-        Doctor currentDoctor = (Doctor) getArguments().getSerializable("Doctor");
+
+
+        currentDoctor = (Doctor) getArguments().getSerializable("Doctor");
+
+        drawerActivity = (DrawerActivity) getActivity();
+
+        setToolbar(view);
 
         _doctorName.setText(currentDoctor.getUserAttributes().getFullName());
         _doctorBio.setText(currentDoctor.getSpecialty());
@@ -60,6 +74,32 @@ public class DoctorProfileFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    private void setToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        drawerActivity.setSupportActionBar(toolbar);
+        //drawerActivity.getSupportActionBar().setTitle(getString(R.string.profile));
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerActivity.drawer.setDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @OnClick(R.id.show_day)
+    public void showDay(View view) {
+        setScheduleFragment();
+    }
+
+    private void setScheduleFragment() {
+        ScheduleFragment fragment = new ScheduleFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("DoctorId", currentDoctor.getId());
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = drawerActivity.getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_drawer, fragment);
+        fragmentTransaction.commit();
     }
 
 
