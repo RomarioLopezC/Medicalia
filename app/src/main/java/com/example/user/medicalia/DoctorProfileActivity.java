@@ -14,6 +14,9 @@ public class DoctorProfileActivity extends AppCompatActivity {
 
     @Bind(R.id.user_profile_name) TextView _doctorName;
     @Bind(R.id.user_profile_short_bio) TextView _doctorBio;
+    @Bind(R.id.Hospital) TextView _hostpital;
+    @Bind(R.id.address) TextView _address;
+    @Bind(R.id.office) TextView _office;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +29,8 @@ public class DoctorProfileActivity extends AppCompatActivity {
 
         _doctorName.setText(currentDoctor.getUserAttributes().getName());
         _doctorBio.setText(currentDoctor.getSpecialty());
+        _hostpital.setText(currentDoctor.getHospital());
+        _address.setText(currentDoctor.getAddress());
+        _office.setText(currentDoctor.getOffice());
     }
 }
