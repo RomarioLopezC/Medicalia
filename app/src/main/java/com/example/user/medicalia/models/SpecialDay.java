@@ -1,12 +1,20 @@
 
 package com.example.user.medicalia.models;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.annotation.Generated;
+
 @Generated("org.jsonschema2pojo")
 public class SpecialDay {
+
+    private static final String DATE_FORMAT = "yyy-MM-dd";
 
     @SerializedName("day")
     @Expose
@@ -31,6 +39,19 @@ public class SpecialDay {
      */
     public String getDay() {
         return day;
+    }
+
+    public Calendar getDayCalendar(){
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(day);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.setTime(date);
+        return calendar;
     }
 
     /**

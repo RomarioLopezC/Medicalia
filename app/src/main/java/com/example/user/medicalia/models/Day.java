@@ -19,7 +19,6 @@ public class Day {
     public static final String AVAILABLE = "Disponible";
     public static final String LUNCH = "Comida";
 
-
     private List<Hour> hours;
     private Schedule schedule;
 
@@ -45,7 +44,7 @@ public class Day {
         calendarEnd = GregorianCalendar.getInstance();
         calendarStartLunch = GregorianCalendar.getInstance();
         calendarEndLunch = GregorianCalendar.getInstance();
-        dateFormat = new SimpleDateFormat("yyy-MM-dd'T'HH:mm");
+        dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
         setDateCalendar(schedule.getStart(), calendarStart);
         setDateCalendar(schedule.getEnd(), calendarEnd);
@@ -82,7 +81,8 @@ public class Day {
 
             //Para agregarle el 0 cuando sema multiplo de 10
             String minutes = String.valueOf(startMinutes);
-            if (startMinutes % 10 == 0){
+
+            if (startMinutes < 10){
                 minutes = minutes + "0";
             }
 

@@ -23,15 +23,18 @@ import com.example.user.medicalia.DrawerActivity;
 import com.example.user.medicalia.R;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.adapter.ScheduleAdapter;
+import com.example.user.medicalia.models.Appointment;
 import com.example.user.medicalia.models.Day;
 import com.example.user.medicalia.models.Hour;
 import com.example.user.medicalia.models.Patient;
 import com.example.user.medicalia.models.Schedule;
+import com.example.user.medicalia.models.SpecialDay;
 import com.example.user.medicalia.remote.ScheduleAPI;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,6 +62,9 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     private ProgressDialog progressDialog;
     private Day normalDay;
     private Calendar today;
+
+    private List<SpecialDay> specialDays;
+    private List<Appointment> appointments;
 
     private DatePickerDialog datePickerDialog;
 
@@ -115,7 +121,7 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
     private void setTitle(int year, int month, int day) {
         String mes = "";
-        switch (month){
+        switch (month) {
             case 0:
                 mes = "Enero";
                 break;
@@ -209,6 +215,9 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
                         Log.d(TAG, String.valueOf(code));
                         Schedule schedule = response.body();
 
+                        specialDays = schedule.getSpecialDays();
+                        appointments = schedule.getAppointments();
+
                         normalDay = new Day(schedule);
 
                         scheduleAdapter.swap(normalDay.getHours());
@@ -257,8 +266,29 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         progressDialog.show();
+
+        List<Hour> hours = normalDay.getHours();
         today.set(year, month, day);
-        scheduleAdapter.swap(normalDay.getHours());
+
+        for (SpecialDay specialDay : specialDays) {
+            Calendar otherCalendar = specialDay.getDayCalendar();
+
+            if (otherCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                    otherCalendar.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+                    otherCalendar.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)) {
+
+                Schedule newSchedule = new Schedule(specialDay.getStart(),
+                        specialDay.getEnd(),
+                        specialDay.getStartLunch(),
+                        specialDay.getEndLunch(), null, null);
+
+                Day newDay = new Day(newSchedule);
+                hours = newDay.getHours();
+            }
+
+        }
+
+        scheduleAdapter.swap(hours);
         setTitle(year, month, day);
         datePickerDialog.dismiss();
         progressDialog.dismiss();
