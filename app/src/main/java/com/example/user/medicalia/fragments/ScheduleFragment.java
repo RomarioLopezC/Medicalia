@@ -61,6 +61,7 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     private String token;
     private ProgressDialog progressDialog;
     private Day normalDay;
+    private Schedule normalSchedule;
     private Calendar today;
 
     private List<SpecialDay> specialDays;
@@ -204,7 +205,8 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
     private void fetchSchedule() {
         showLoadingDialog();
-        ScheduleAPI.Factory.getInstance().getSchedule(token, "2").enqueue(new Callback<Schedule>() {
+        Log.d("Token", token);
+        ScheduleAPI.Factory.getInstance().getSchedule(token, "1").enqueue(new Callback<Schedule>() {
             @Override
             public void onResponse(Call<Schedule> call, Response<Schedule> response) {
                 int code = response.code();
@@ -212,12 +214,12 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
                 switch (code) {
                     case 200:
                         Log.d(TAG, String.valueOf(code));
-                        Schedule schedule = response.body();
+                        normalSchedule = response.body();
 
-                        specialDays = schedule.getSpecialDays();
-                        appointments = schedule.getAppointments();
+                        specialDays = normalSchedule.getSpecialDays();
+                        appointments = normalSchedule.getAppointments();
 
-                        normalDay = new Day(schedule);
+                        normalDay = new Day(normalSchedule);
 
                         drawDayList(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
 
@@ -272,34 +274,46 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
         progressDialog.show();
 
         List<Appointment> todayAppointments = new ArrayList<>();
-        List<Hour> hours = normalDay.getHours();
+        Schedule schedule = normalSchedule;
         today.set(year, month, day);
 
-        for (Appointment appointment: appointments) {
+        // Se escogen las citas del dia del hoy
+        for (Appointment appointment : appointments) {
+            Calendar calendarAppointment = appointment.getStartTimeCalendar();
 
-        }
-
-        for (SpecialDay specialDay : specialDays) {
-            Calendar otherCalendar = specialDay.getDayCalendar();
-
-            if (otherCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
-                    otherCalendar.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
-                    otherCalendar.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)) {
-
-                Schedule newSchedule = new Schedule(specialDay.getStart(),
-                        specialDay.getEnd(),
-                        specialDay.getStartLunch(),
-                        specialDay.getEndLunch(), null, null);
-
-                Day newDay = new Day(newSchedule);
-                hours = newDay.getHours();
+            if (isTheSameDay(calendarAppointment)) {
+                todayAppointments.add(appointment);
             }
 
         }
 
-        scheduleAdapter.swap(hours);
+        // Se modifica el horario para los dias especiales
+        for (SpecialDay specialDay : specialDays) {
+            Calendar otherCalendar = specialDay.getDayCalendar();
+
+            if (isTheSameDay(otherCalendar)) {
+
+                schedule = new Schedule(specialDay.getStart(),
+                        specialDay.getEnd(),
+                        specialDay.getStartLunch(),
+                        specialDay.getEndLunch(), null, null);
+
+            }
+
+        }
+
+        schedule.setAppointments(todayAppointments);
+
+        Day newDay = new Day(schedule);
+        scheduleAdapter.swap(newDay.getHours());
         setTitle(year, month, day);
         progressDialog.dismiss();
+    }
+
+    private boolean isTheSameDay(Calendar otherCalendar) {
+        return otherCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                otherCalendar.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+                otherCalendar.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
     }
 
 

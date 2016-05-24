@@ -1,6 +1,7 @@
 package com.example.user.medicalia.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.user.medicalia.R;
+import com.example.user.medicalia.models.Day;
 import com.example.user.medicalia.models.Hour;
 
 import java.util.List;
@@ -20,6 +22,10 @@ import butterknife.ButterKnife;
  * Created by USER on 22/05/2016.
  */
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
+
+    public String COLOR_AVAILABLE = "#8ED081";
+    public String COLOR_LUNCH = "#CC5521";
+    public String COLOR_OCCUPIED = "#22406c";
 
     private final Context context;
     private List<Hour> hours;
@@ -45,9 +51,25 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Hour currentHour = hours.get(position);
         String hourFormat = currentHour.getHour();
+        String info = currentHour.getInfo();
+        String color = COLOR_AVAILABLE;
+
+        switch (info){
+            case Day.AVAILABLE:
+                color = COLOR_AVAILABLE;
+                break;
+            case Day.OCCUPIED:
+                color = COLOR_OCCUPIED;
+                break;
+            case Day.LUNCH:
+                color = COLOR_LUNCH;
+                break;
+        }
+
         holder.textView_hour.setText(hourFormat);
         holder.textView_am.setText(currentHour.getHour_format());
-        holder.textView_available.setText(currentHour.getInfo());
+        holder.textView_available.setText(info);
+        holder.background_available.setBackgroundColor(Color.parseColor(color));
     }
 
     @Override
