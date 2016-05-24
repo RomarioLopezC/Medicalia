@@ -9,6 +9,9 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Patient {
 
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("blood_type")
     @Expose
     private String bloodType;
@@ -33,6 +36,24 @@ public class Patient {
 
     public Patient(String name, String lastname, String email, String password, String passwordConfirm, String number){
         this.userAttributes = new UserAttributes(name,lastname,email,password,passwordConfirm,number);
+    }
+
+    /**
+     *
+     * @return
+     * The id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id
+     * The id
+     */
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     /**
