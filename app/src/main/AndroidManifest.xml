@@ -32,11 +32,13 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".DrawerActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CompleteRegisterActivity" />
         <activity 
         	android:name=".DoctorProfileActivity"
+            android:screenOrientation="portrait"
         	android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
