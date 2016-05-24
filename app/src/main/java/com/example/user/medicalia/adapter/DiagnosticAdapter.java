@@ -70,7 +70,7 @@ public class DiagnosticAdapter extends RecyclerView.Adapter<DiagnosticAdapter.Vi
         public TextView text_description;
         @Bind(R.id.tv_treatment)
         public TextView text_treatment;
-        @Bind(R.id.tv_date_time)
+        @Bind(R.id.tv_datetime)
         public TextView text_date;
 
         public ViewHolder(View view) {

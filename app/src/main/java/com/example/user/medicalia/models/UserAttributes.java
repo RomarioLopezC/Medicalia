@@ -11,6 +11,9 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class UserAttributes implements Serializable{
 
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("email")
     @Expose
     private String email;
@@ -43,6 +46,24 @@ public class UserAttributes implements Serializable{
         this.name = name;
         this.lastname = lastname;
         this.mobile = mobile;
+    }
+
+    /**
+     *
+     * @return
+     * The id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id
+     * The id
+     */
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     /**

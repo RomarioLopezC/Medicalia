@@ -120,7 +120,7 @@ public class DiagnosticsFragment extends Fragment {
     }
 
     public void fetchDiagnostics(Callback<List<Diagnostic>> callback){
-        PatientAPI.Factory.getInstance().diagnostics(token, 1).enqueue(callback);
+        PatientAPI.Factory.getInstance().diagnostics(token, currentUser.getId()).enqueue(callback);
     }
 
     public Callback<List<Diagnostic>> mCallbackFirsPage = new Callback<List<Diagnostic>>() {
