@@ -49,8 +49,8 @@ public class DiagnosticAdapter extends RecyclerView.Adapter<DiagnosticAdapter.Vi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Diagnostic currentDiagnostic = diagnosticList.get(position);
 
-        holder.text_doctor.setText(currentDiagnostic.getDoctor());
-        holder.text_speciality.setText("NOSE");
+        holder.text_doctor.setText(currentDiagnostic.getDoctor().getUserAttributes().getName());
+        holder.text_speciality.setText(currentDiagnostic.getDoctor().getSpecialty());
         holder.text_date.setText(currentDiagnostic.getDateTime());
         holder.diagnostic.setText("Diagnostico");
         holder.text_diagnostic.setText(currentDiagnostic.getDescription());

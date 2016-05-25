@@ -17,7 +17,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="63dp">
+            android:layout_height="63dp"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/image_doctor_icon"
@@ -45,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:text="Speciality"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/abc_background_cache_hint_selector_material_light" />
+                    android:textColor="@android:color/white" />
             </LinearLayout>
 
             <TextView
@@ -54,105 +55,95 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="20dp"
+                android:layout_weight="0.11"
                 android:text="Date"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/abc_background_cache_hint_selector_material_light"
-                android:layout_weight="0.11" />
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:background="#c0c0c0" />
+        <LinearLayout
+            android:id="@+id/diagnostic_clicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:id="@+id/diagnostic_clicker"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/image_diagnostic"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/sick_icon"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/tv_diagnostic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="Diagnostico"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/abc_background_cache_hint_selector_material_light" />
-
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/image_diagnostic"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/sick_icon"
+                android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/tv_diagnostic_description"
+                android:id="@+id/tv_diagnostic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center_horizontal"
-                android:text="Hey"
-                android:textColor="@color/abc_background_cache_hint_selector_material_light"/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="5dp"
+                android:text="Diagnostico"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/white" />
 
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:background="#c0c0c0" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:id="@+id/treatment_clickeable">
-
-                <ImageView
-                    android:id="@+id/image_treatment"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/pill_icon"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/tv_treatmentName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/image_diagnostic"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toEndOf="@+id/image_diagnostic"
-                    android:text="Tratamiento"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/abc_background_cache_hint_selector_material_light" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_treatment_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="Hey"
-                android:textColor="@color/abc_background_cache_hint_selector_material_light"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_diagnostic_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:text="Hey"
+            android:textColor="@android:color/white" />
+
+
+        <LinearLayout
+            android:id="@+id/treatment_clickeable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/image_treatment"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/pill_icon"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_treatmentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/image_diagnostic"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@+id/image_diagnostic"
+                android:text="Tratamiento"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_treatment_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Hey"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
 </LinearLayout>

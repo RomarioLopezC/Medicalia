@@ -20,7 +20,7 @@ public class Diagnostic {
     private String dateTime;
     @SerializedName("doctor")
     @Expose
-    private String doctor;
+    private Doctor doctor;
 
     /**
      * 
@@ -81,7 +81,7 @@ public class Diagnostic {
      * @return
      *     The doctor
      */
-    public String getDoctor() {
+    public Doctor getDoctor() {
         return doctor;
     }
 
@@ -90,7 +90,7 @@ public class Diagnostic {
      * @param doctor
      *     The doctor
      */
-    public void setDoctor(String doctor) {
+    public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
 
