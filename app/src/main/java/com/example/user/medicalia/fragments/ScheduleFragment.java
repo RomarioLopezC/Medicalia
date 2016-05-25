@@ -2,6 +2,7 @@ package com.example.user.medicalia.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -57,7 +58,6 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
     public DrawerActivity drawerActivity = null;
     public Toolbar toolbar = null;
-    private Patient currentUser;
     private String token;
     private ProgressDialog progressDialog;
     private Day normalDay;
@@ -66,6 +66,7 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
 
     private List<SpecialDay> specialDays;
     private List<Appointment> appointments;
+    private Patient currentUser;
 
     private DatePickerDialog datePickerDialog;
 
@@ -87,6 +88,26 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
         setHasOptionsMenu(true);
         drawerActivity = (DrawerActivity) getActivity();
 
+        String jsonCurrentUser = drawerActivity.getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
+                .getString(getString(R.string.current_user_key), "{\n" +
+                        "  \"blood_type\": \"B++\",\n" +
+                        "  \"birthday\": \"9999-12-12\",\n" +
+                        "  \"height\": 1,\n" +
+                        "  \"weight\": 69,\n" +
+                        "  \"allergies\": \"none\",\n" +
+                        "  \"gender\": \"macho\",\n" +
+                        "  \"user\": {\n" +
+                        "    \"email\": \"test@hotmail.com\",\n" +
+                        "    \"name\": \"Test\",\n" +
+                        "    \"lastname\": \"Perez\",\n" +
+                        "    \"mobile\": \"9993939393\",\n" +
+                        "    \"token\": \"22c07aa8cca26a484b707e363dd90f3d\",\n" +
+                        "    \"user_type\": null\n" +
+                        "  }\n" +
+                        "}");
+
+        currentUser = Utils.toUserAtributtes(jsonCurrentUser);
+
         setToolbar(view);
 
         getUserData();
@@ -102,9 +123,16 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     }
 
     private void getUserData() {
-        String jsonUser = getArguments().getString(getString(R.string.user_key), "");
-        currentUser = Utils.toUserAtributtes(jsonUser);
-        token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
+
+
+        String jsonUser = getArguments().getString(getString(R.string.user_key), null);
+        if (jsonUser == null){
+            token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
+        }else{
+            currentUser = Utils.toUserAtributtes(jsonUser);
+            token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
+        }
+
     }
 
     private void setToolbar(View view) {
@@ -206,7 +234,14 @@ public class ScheduleFragment extends Fragment implements DatePickerDialog.OnDat
     private void fetchSchedule() {
         showLoadingDialog();
         Log.d("Token", token);
-        ScheduleAPI.Factory.getInstance().getSchedule(token, "1").enqueue(new Callback<Schedule>() {
+        String doctorID = "1";
+
+        if (getArguments().get("DoctorId") != null){
+            doctorID = String.valueOf(getArguments().get("DoctorId"));
+        }
+
+        Log.d("Token", doctorID);
+        ScheduleAPI.Factory.getInstance().getSchedule(token, doctorID).enqueue(new Callback<Schedule>() {
             @Override
             public void onResponse(Call<Schedule> call, Response<Schedule> response) {
                 int code = response.code();

@@ -1,7 +1,5 @@
 package com.example.user.medicalia.models;
 
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,7 +73,7 @@ public class Day {
     private void createListHours() {
 
         for (int i = startHour; i <= endHour; i++) {
-            Log.d("Day", String.valueOf(i));
+            //Log.d("Day", String.valueOf(i));
             String info = AVAILABLE;
             String hoursFormat = AM;
             int hour = i;
