@@ -2,6 +2,7 @@ package com.example.user.medicalia.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +38,8 @@ public class DoctorProfileFragment extends Fragment {
     @Bind(R.id.Hospital) TextView _hostpital;
     @Bind(R.id.address) TextView _address;
     @Bind(R.id.office) TextView _office;
+    @Bind(R.id.show_day)
+    FloatingActionButton fab;
 
     private OnFragmentInteractionListener mListener;
     public Toolbar toolbar = null;
@@ -51,7 +54,6 @@ public class DoctorProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_doctor_profile, container, false);
         ButterKnife.bind(this,view);
-
 
 
         currentDoctor = (Doctor) getArguments().getSerializable("Doctor");
@@ -79,7 +81,7 @@ public class DoctorProfileFragment extends Fragment {
     private void setToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         drawerActivity.setSupportActionBar(toolbar);
-        //drawerActivity.getSupportActionBar().setTitle(getString(R.string.profile));
+        drawerActivity.getSupportActionBar().setTitle("");
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 drawerActivity, drawerActivity.drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
