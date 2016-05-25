@@ -46,12 +46,16 @@ public class DiagnosticAdapter extends RecyclerView.Adapter<DiagnosticAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Diagnostic currentDiagnostic = diagnosticList.get(position);
+
         holder.text_doctor.setText(currentDiagnostic.getDoctor());
-        holder.text_description.setText(currentDiagnostic.getDescription());
-        holder.text_treatment.setText(currentDiagnostic.getTreatment());
+        holder.text_speciality.setText("NOSE");
         holder.text_date.setText(currentDiagnostic.getDateTime());
+        holder.diagnostic.setText("Diagnostico");
+        holder.text_diagnostic.setText(currentDiagnostic.getDescription());
+        holder.treatment.setText("Tratamiento");
+        holder.text_treatment.setText(currentDiagnostic.getTreatment());
     }
 
     @Override
@@ -64,14 +68,26 @@ public class DiagnosticAdapter extends RecyclerView.Adapter<DiagnosticAdapter.Vi
         @Bind(R.id.container_diagnostics)
         public LinearLayout rl_container;
 
-        @Bind(R.id.tv_doctor)
+        @Bind(R.id.tv_doctor_name)
         public TextView text_doctor;
-        @Bind(R.id.tv_description)
-        public TextView text_description;
-        @Bind(R.id.tv_treatment)
-        public TextView text_treatment;
-        @Bind(R.id.tv_datetime)
+        @Bind(R.id.tv_doctor_speciality)
+        public TextView text_speciality;
+        @Bind(R.id.tv_date)
         public TextView text_date;
+
+        @Bind(R.id.diagnostic_clicker)
+        public LinearLayout linearLayoutDiagnostic;
+        @Bind(R.id.tv_diagnostic)
+        public TextView diagnostic;
+        @Bind(R.id.tv_diagnostic_description)
+        public TextView text_diagnostic;
+
+        @Bind(R.id.treatment_clickeable)
+        public LinearLayout linearLayoutTreatment;
+        @Bind(R.id.tv_treatmentName)
+        public TextView treatment;
+        @Bind(R.id.tv_treatment_description)
+        public TextView text_treatment;
 
         public ViewHolder(View view) {
             super(view);
