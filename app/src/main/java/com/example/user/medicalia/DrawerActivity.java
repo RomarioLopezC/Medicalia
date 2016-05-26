@@ -1,5 +1,9 @@
 package com.example.user.medicalia;
 
+import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,15 +14,22 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
 import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.fragments.DiagnosticsFragment;
 import com.example.user.medicalia.fragments.DoctorsFragment;
 import com.example.user.medicalia.fragments.ProfileFragment;
 import com.example.user.medicalia.models.Patient;
+
+import java.util.List;
+import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +40,8 @@ public class DrawerActivity extends AppCompatActivity
     public NavigationView navigationView = null;
     public DrawerLayout drawer = null;
     private String jsonCurrentUser;
+    private BeaconManager beaconManager;
+    private boolean beaconInRange = false;
 
     @Bind(R.id.textView_pacient_name)
     TextView textView_pacient_name;
@@ -42,7 +55,38 @@ public class DrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_drawer);
         ButterKnife.bind(this);
 
-         jsonCurrentUser = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
+//        Beacon
+        beaconManager = new BeaconManager(getApplicationContext());
+
+        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
+            @Override
+            public void onEnteredRegion(Region region, List<Beacon> list) {
+                if (!beaconInRange) {
+                    showBeaconNotification(
+                            "Bienvenido al consultorio.",
+                            "Su cita está agendada a las 4:00pm");
+                    beaconInRange = true;
+                }
+            }
+
+            @Override
+            public void onExitedRegion(Region region) {
+                showBeaconNotification("Consulta terminada.", "Esperamos su mejora.");
+                beaconInRange = false;
+            }
+        });
+
+        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+            @Override
+            public void onServiceReady() {
+                beaconManager.startMonitoring(new Region(
+                        "Region a monitorear",
+                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
+                        63463, 21120));
+            }
+        });
+
+        jsonCurrentUser = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
                 .getString(getString(R.string.current_user_key), "{\n" +
                         "  \"blood_type\": \"B++\",\n" +
                         "  \"birthday\": \"9999-12-12\",\n" +
@@ -83,9 +127,8 @@ public class DrawerActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -128,40 +171,46 @@ public class DrawerActivity extends AppCompatActivity
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
-        }else if(id == R.id.diagnostics){
+        } else if (id == R.id.diagnostics) {
             fragment = new DiagnosticsFragment();
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
-        }else if (id == R.id.find_by_name) {
+        } else if (id == R.id.find_by_name) {
             fragment = new DoctorsFragment();
             bundle.putString(getString(R.string.find_by_key), getString(R.string.by_name));
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
-        } else if (id == R.id.find_by_hospital) {
-            fragment = new DoctorsFragment();
-            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_hospital));
-            fragment.setArguments(bundle);
-            fragmentTransaction = true;
+//        } else if (id == R.id.find_by_hospital) {
+//            fragment = new DoctorsFragment();
+//            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_hospital));
+//            fragment.setArguments(bundle);
+//            fragmentTransaction = true;
+//
+//        } else if (id == R.id.find_by_specialty) {
+//            fragment = new DoctorsFragment();
+//            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_specialty));
+//            fragment.setArguments(bundle);
+//            fragmentTransaction = true;
 
-        } else if (id == R.id.find_by_specialty) {
-            fragment = new DoctorsFragment();
-            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_specialty));
-            fragment.setArguments(bundle);
-            fragmentTransaction = true;
-
-        } else if (id == R.id.nav_logout){
+        } else if (id == R.id.nav_logout) {
             SharedPreferences.Editor edit = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND).edit();
             edit.clear();
             edit.apply();
+//            Para dejar de monitorear cuando cierra la sesión
+            beaconManager.stopMonitoring(new Region(
+                    "Region a monitorear",
+                    UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
+                    63463, 21120));
+
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
 
-        if (fragmentTransaction){
+        if (fragmentTransaction) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_drawer, fragment)
+                    .replace(R.id.content_drawer, fragment).addToBackStack("fragment")
                     .commit();
 
             ///item.setChecked(true);
@@ -171,4 +220,24 @@ public class DrawerActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void showBeaconNotification(String title, String message) {
+        Intent notifyIntent = new Intent(this, DrawerActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0,
+                new Intent[]{notifyIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .build();
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notification);
+    }
+
 }
+

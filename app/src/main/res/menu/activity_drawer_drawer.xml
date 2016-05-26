@@ -22,14 +22,14 @@
                 android:id="@+id/find_by_name"
                 android:icon="@drawable/md"
                 android:title="@string/find_by_name" />
-            <item
-                android:id="@+id/find_by_hospital"
-                android:icon="@drawable/hostpitalbuilding"
-                android:title="@string/find_by_hospital" />
-            <item
-                android:id="@+id/find_by_specialty"
-                android:icon="@drawable/stethoscope"
-                android:title="@string/find_by_specialty" />
+            <!--<item-->
+                <!--android:id="@+id/find_by_hospital"-->
+                <!--android:icon="@drawable/hostpitalbuilding"-->
+                <!--android:title="@string/find_by_hospital" />-->
+            <!--<item-->
+                <!--android:id="@+id/find_by_specialty"-->
+                <!--android:icon="@drawable/stethoscope"-->
+                <!--android:title="@string/find_by_specialty" />-->
         </menu>
     </item>
 </menu>

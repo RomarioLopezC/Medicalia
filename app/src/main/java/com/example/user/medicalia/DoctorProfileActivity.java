@@ -1,7 +1,9 @@
 package com.example.user.medicalia;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.user.medicalia.models.Doctor;
