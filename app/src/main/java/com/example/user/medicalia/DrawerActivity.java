@@ -1,6 +1,5 @@
 package com.example.user.medicalia;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -27,8 +27,10 @@ import com.example.user.medicalia.Utils.Utils;
 import com.example.user.medicalia.fragments.DiagnosticsFragment;
 import com.example.user.medicalia.fragments.DoctorsFragment;
 import com.example.user.medicalia.fragments.ProfileFragment;
+import com.example.user.medicalia.models.Message;
 import com.example.user.medicalia.models.Patient;
 import com.example.user.medicalia.remote.AppointmentAPI;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.List;
@@ -86,7 +88,6 @@ public class DrawerActivity extends AppCompatActivity
         token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
 
 
-
 //        Beacon
         beaconManager = new BeaconManager(getApplicationContext());
 
@@ -94,74 +95,57 @@ public class DrawerActivity extends AppCompatActivity
             @Override
             public void onEnteredRegion(Region region, List<Beacon> list) {
                 if (!beaconInRange) {
-//                    PEREZ HELP PEREZ HELP PEREZ
-//                    AQUI MANDA EL REQUEST A LA API Y LO QUE TE RESPONDA EN BODY LO MANDAS COMO
-//                    PARAMETRO DEL METODO DE SHOWBEACONNOTIFICACION
-
                     AppointmentAPI.Factory.getInstance().register(token, "B9407F30-F5F8-466E-AFF9-25556B57FE6D")
                             .enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     int code = response.code();
-
-
                                     switch (code) {
                                         case 200:
                                             try {
-                                                Log.e("Drawer Activity", response.body().string());
-                                                showBeaconNotification("Bienvenido al consulturio.",
-                                                        response.body().string());
+                                                Message message = new Gson().fromJson(response.body().string(), Message.class);
+                                                Log.e("Registerr", message.getBody());
+                                                showBeaconNotification("Bienvenido al consultorio.",
+                                                        message.getBody());
                                                 beaconInRange = true;
                                             } catch (IOException e) {
                                                 Log.e("Drawer Activity", e.getMessage());
                                             }
-
                                             break;
                                         default:
                                             Log.e("Drawer Activity", String.valueOf(code));
                                     }
-
-
                                 }
-
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                     Log.e("Drawer Activity", t.getMessage());
                                 }
                             });
-
-
-
                 }
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                showBeaconNotification("Esperamos su mejora.",
-                        "Todavía no cuenta con un diagnóstico. Revisar la información más tarde.");
-//                AQUI MANDA OTRO REQUEST PARA SABER SI SE CREO UN DIAGNOSTICO O NO y responde igual que el de arriba
                 AppointmentAPI.Factory.getInstance().diagnostic_created(token, "B9407F30-F5F8-466E-AFF9-25556B57FE6D")
                         .enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 int code = response.code();
-
                                 switch (code) {
                                     case 200:
                                         try {
-                                            showBeaconNotification("Bienvenido al consulturio.",
-                                                    response.body().string());
+                                            Message message = new Gson().fromJson(response.body().string(), Message.class);
+                                            Log.e("Diagnostic Created", message.getBody());
+                                            showBeaconNotification("Esperamos su mejora.",
+                                                    message.getBody());
                                             beaconInRange = true;
                                         } catch (IOException e) {
                                             Log.e("Drawer Activity", e.getMessage());
                                         }
-
                                         break;
                                     default:
                                         Log.e("Drawer Activity", String.valueOf(code));
                                 }
-
-
                             }
 
                             @Override
@@ -169,7 +153,6 @@ public class DrawerActivity extends AppCompatActivity
                                 Log.e("Drawer Activity", t.getMessage());
                             }
                         });
-
                 beaconInRange = false;
             }
         });
@@ -183,9 +166,6 @@ public class DrawerActivity extends AppCompatActivity
                         63463, 21120));
             }
         });
-
-
-
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -264,18 +244,6 @@ public class DrawerActivity extends AppCompatActivity
             fragment.setArguments(bundle);
             fragmentTransaction = true;
 
-//        } else if (id == R.id.find_by_hospital) {
-//            fragment = new DoctorsFragment();
-//            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_hospital));
-//            fragment.setArguments(bundle);
-//            fragmentTransaction = true;
-//
-//        } else if (id == R.id.find_by_specialty) {
-//            fragment = new DoctorsFragment();
-//            bundle.putString(getString(R.string.find_by_key), getString(R.string.by_specialty));
-//            fragment.setArguments(bundle);
-//            fragmentTransaction = true;
-
         } else if (id == R.id.nav_logout) {
             SharedPreferences.Editor edit = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND).edit();
             edit.clear();
@@ -307,8 +275,8 @@ public class DrawerActivity extends AppCompatActivity
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(message);
-        System.out.println(message);
         mBuilder.setSmallIcon(R.drawable.md);
+        mBuilder.setAutoCancel(true);
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         mBuilder.setSound(alarmSound);
@@ -316,12 +284,7 @@ public class DrawerActivity extends AppCompatActivity
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         inboxStyle.setBigContentTitle("Notificaciones de Medicalia:");
-//        String mensaje_1 = message.split(".")[0];
         inboxStyle.addLine(message);
-//        if (message.split(".").length > 1) {
-//            String mensaje_2 = message.split(".")[1];
-//            inboxStyle.addLine(mensaje_2);
-//        }
         mBuilder.setStyle(inboxStyle);
 
         Intent notifyIntent = new Intent(this, DrawerActivity.class);
@@ -333,7 +296,6 @@ public class DrawerActivity extends AppCompatActivity
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-   /* notificationID allows you to update the notification later on. */
         mNotificationManager.notify(1, mBuilder.build());
     }
 

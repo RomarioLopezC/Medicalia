@@ -120,7 +120,7 @@ public class DoctorsFragment extends Fragment {
         drawerActivity.setSupportActionBar(toolbar);
 
         switch (mFindBy){
-            case "Nombre":
+            case "Mi Doctor":
                 drawerActivity.getSupportActionBar().setTitle(getString(R.string.by_name));
                 break;
             case "Especialidad":
@@ -197,7 +197,7 @@ public class DoctorsFragment extends Fragment {
     public void fetchDoctors(Callback<List<Doctor>> callback){
         switch (mFindBy){
 
-            case "Nombre":
+            case "Mi Doctor":
                 DoctorAPI.Factory.getInstance().getDoctors(token, mCurrentQuery, null, null, String.valueOf(mCurrentPage))
                         .enqueue(callback);
                 break;

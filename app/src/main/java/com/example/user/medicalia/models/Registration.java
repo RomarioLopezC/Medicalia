@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
-/**
- * Created by Kev' on 16/05/2016.
- */
 @Generated("org.jsonschema2pojo")
 public class Registration {
     @SerializedName("patient")
