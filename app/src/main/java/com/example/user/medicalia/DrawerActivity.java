@@ -1,5 +1,6 @@
 package com.example.user.medicalia;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -27,12 +28,18 @@ import com.example.user.medicalia.fragments.DiagnosticsFragment;
 import com.example.user.medicalia.fragments.DoctorsFragment;
 import com.example.user.medicalia.fragments.ProfileFragment;
 import com.example.user.medicalia.models.Patient;
+import com.example.user.medicalia.remote.AppointmentAPI;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +49,8 @@ public class DrawerActivity extends AppCompatActivity
     private String jsonCurrentUser;
     private BeaconManager beaconManager;
     private boolean beaconInRange = false;
+    private Patient currentUser;
+    private String token;
 
     @Bind(R.id.textView_pacient_name)
     TextView textView_pacient_name;
@@ -54,43 +63,6 @@ public class DrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
         ButterKnife.bind(this);
-
-//        Beacon
-        beaconManager = new BeaconManager(getApplicationContext());
-
-        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
-            @Override
-            public void onEnteredRegion(Region region, List<Beacon> list) {
-                if (!beaconInRange) {
-//                    PEREZ HELP PEREZ HELP PEREZ
-//                    AQUI MANDA EL REQUEST A LA API Y LO QUE TE RESPONDA EN BODY LO MANDAS COMO
-//                    PARAMETRO DEL METODO DE SHOWBEACONNOTIFICACION
-                    showBeaconNotification("Bienvenido al consulturio.",
-                            "Su cita está agendada a las 4:00pm");
-                    beaconInRange = true;
-                }
-            }
-
-            @Override
-            public void onExitedRegion(Region region) {
-                showBeaconNotification("Esperamos su mejora.",
-                        "Todavía no cuenta con un diagnóstico. Revisar la información más tarde.");
-//                AQUI MANDA OTRO REQUEST PARA SABER SI SE CREO UN DIAGNOSTICO O NO y responde igual que el de arriba
-
-
-                beaconInRange = false;
-            }
-        });
-
-        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-            @Override
-            public void onServiceReady() {
-                beaconManager.startMonitoring(new Region(
-                        "Region a monitorear",
-                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                        63463, 21120));
-            }
-        });
 
         jsonCurrentUser = getSharedPreferences(getString(R.string.name_shared_preferences), Context.MODE_APPEND)
                 .getString(getString(R.string.current_user_key), "{\n" +
@@ -109,8 +81,112 @@ public class DrawerActivity extends AppCompatActivity
                         "    \"user_type\": null\n" +
                         "  }\n" +
                         "}");
+        currentUser = Utils.toUserAtributtes(jsonCurrentUser);
 
-        Patient currentUser = Utils.toUserAtributtes(jsonCurrentUser);
+        token = getString(R.string.token) + currentUser.getUserAttributes().getToken();
+
+
+
+//        Beacon
+        beaconManager = new BeaconManager(getApplicationContext());
+
+        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
+            @Override
+            public void onEnteredRegion(Region region, List<Beacon> list) {
+                if (!beaconInRange) {
+//                    PEREZ HELP PEREZ HELP PEREZ
+//                    AQUI MANDA EL REQUEST A LA API Y LO QUE TE RESPONDA EN BODY LO MANDAS COMO
+//                    PARAMETRO DEL METODO DE SHOWBEACONNOTIFICACION
+
+                    AppointmentAPI.Factory.getInstance().register(token, "B9407F30-F5F8-466E-AFF9-25556B57FE6D")
+                            .enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    int code = response.code();
+
+
+                                    switch (code) {
+                                        case 200:
+                                            try {
+                                                Log.e("Drawer Activity", response.body().string());
+                                                showBeaconNotification("Bienvenido al consulturio.",
+                                                        response.body().string());
+                                                beaconInRange = true;
+                                            } catch (IOException e) {
+                                                Log.e("Drawer Activity", e.getMessage());
+                                            }
+
+                                            break;
+                                        default:
+                                            Log.e("Drawer Activity", String.valueOf(code));
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    Log.e("Drawer Activity", t.getMessage());
+                                }
+                            });
+
+
+
+                }
+            }
+
+            @Override
+            public void onExitedRegion(Region region) {
+                showBeaconNotification("Esperamos su mejora.",
+                        "Todavía no cuenta con un diagnóstico. Revisar la información más tarde.");
+//                AQUI MANDA OTRO REQUEST PARA SABER SI SE CREO UN DIAGNOSTICO O NO y responde igual que el de arriba
+                AppointmentAPI.Factory.getInstance().diagnostic_created(token, "B9407F30-F5F8-466E-AFF9-25556B57FE6D")
+                        .enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                int code = response.code();
+
+                                switch (code) {
+                                    case 200:
+                                        try {
+                                            showBeaconNotification("Bienvenido al consulturio.",
+                                                    response.body().string());
+                                            beaconInRange = true;
+                                        } catch (IOException e) {
+                                            Log.e("Drawer Activity", e.getMessage());
+                                        }
+
+                                        break;
+                                    default:
+                                        Log.e("Drawer Activity", String.valueOf(code));
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Log.e("Drawer Activity", t.getMessage());
+                            }
+                        });
+
+                beaconInRange = false;
+            }
+        });
+
+        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+            @Override
+            public void onServiceReady() {
+                beaconManager.startMonitoring(new Region(
+                        "Region a monitorear",
+                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
+                        63463, 21120));
+            }
+        });
+
+
+
+
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
