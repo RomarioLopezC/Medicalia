@@ -8,9 +8,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-/**
- * Created by USER on 22/05/2016.
- */
 public class Day {
 
     private static final String DATE_FORMAT = "yyy-MM-dd'T'HH:mm";

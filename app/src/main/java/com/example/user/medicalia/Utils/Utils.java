@@ -3,9 +3,6 @@ package com.example.user.medicalia.Utils;
 import com.example.user.medicalia.models.Patient;
 import com.google.gson.Gson;
 
-/**
- * Created by USER on 10/05/2016.
- */
 public class Utils {
 
     public static Patient toUserAtributtes(String json){

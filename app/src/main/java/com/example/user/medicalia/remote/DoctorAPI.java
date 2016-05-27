@@ -12,9 +12,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
-/**
- * Created by USER on 15/05/2016.
- */
 public interface DoctorAPI {
     String BASE_URL = "http://medicalia.herokuapp.com/";
 

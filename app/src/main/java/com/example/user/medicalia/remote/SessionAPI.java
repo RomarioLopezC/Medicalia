@@ -10,9 +10,6 @@ import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
-/**
- * Created by USER on 01/05/2016.
- */
 public interface SessionAPI {
 
     String BASE_URL = "http://medicalia.herokuapp.com";

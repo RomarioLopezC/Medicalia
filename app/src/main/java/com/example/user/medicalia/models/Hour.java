@@ -1,8 +1,5 @@
 package com.example.user.medicalia.models;
 
-/**
- * Created by USER on 22/05/2016.
- */
 public class Hour {
 
     private String hour;

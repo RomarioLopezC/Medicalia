@@ -18,9 +18,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by USER on 22/05/2016.
- */
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
 
     public String COLOR_AVAILABLE = "#8ED081";

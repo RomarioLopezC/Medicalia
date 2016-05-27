@@ -10,9 +10,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
 
-/**
- * Created by USER on 20/05/2016.
- */
 public interface ScheduleAPI {
     String BASE_URL = "http://medicalia.herokuapp.com/";
 
