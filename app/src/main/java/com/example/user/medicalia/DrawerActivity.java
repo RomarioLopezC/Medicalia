@@ -1,20 +1,20 @@
 package com.example.user.medicalia;
 
-import android.app.FragmentManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -228,21 +228,37 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     public void showBeaconNotification(String title, String message) {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(message);
+        System.out.println(message);
+        mBuilder.setSmallIcon(R.drawable.md);
+
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setSound(alarmSound);
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+        inboxStyle.setBigContentTitle("Notificaciones de Medicalia:");
+//        String mensaje_1 = message.split(".")[0];
+        inboxStyle.addLine(message);
+//        if (message.split(".").length > 1) {
+//            String mensaje_2 = message.split(".")[1];
+//            inboxStyle.addLine(mensaje_2);
+//        }
+        mBuilder.setStyle(inboxStyle);
+
         Intent notifyIntent = new Intent(this, DrawerActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivities(this, 0,
                 new Intent[]{notifyIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .build();
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
+
+        mBuilder.setContentIntent(pendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+   /* notificationID allows you to update the notification later on. */
+        mNotificationManager.notify(1, mBuilder.build());
     }
 
 }
