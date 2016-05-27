@@ -62,8 +62,10 @@ public class DrawerActivity extends AppCompatActivity
             @Override
             public void onEnteredRegion(Region region, List<Beacon> list) {
                 if (!beaconInRange) {
-                    showBeaconNotification(
-                            "Bienvenido al consultorio.",
+//                    PEREZ HELP PEREZ HELP PEREZ
+//                    AQUI MANDA EL REQUEST A LA API Y LO QUE TE RESPONDA EN BODY LO MANDAS COMO
+//                    PARAMETRO DEL METODO DE SHOWBEACONNOTIFICACION
+                    showBeaconNotification("Bienvenido al consulturio.",
                             "Su cita está agendada a las 4:00pm");
                     beaconInRange = true;
                 }
@@ -71,7 +73,11 @@ public class DrawerActivity extends AppCompatActivity
 
             @Override
             public void onExitedRegion(Region region) {
-                showBeaconNotification("Consulta terminada.", "Esperamos su mejora.");
+                showBeaconNotification("Esperamos su mejora.",
+                        "Todavía no cuenta con un diagnóstico. Revisar la información más tarde.");
+//                AQUI MANDA OTRO REQUEST PARA SABER SI SE CREO UN DIAGNOSTICO O NO y responde igual que el de arriba
+
+
                 beaconInRange = false;
             }
         });

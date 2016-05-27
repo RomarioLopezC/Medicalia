@@ -16,7 +16,7 @@
             android:title="@string/logout" />
     </group>
 
-    <item android:title="@string/find_doctors">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/find_by_name"
